@@ -1,0 +1,411 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:HRManagementSystem.ViewModels"
+             xmlns:icons="using:Material.Icons.Avalonia"
+             x:Class="HRManagementSystem.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- 标题栏 -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource MaterialPrimaryMidBrush}"
+                Padding="16"
+                CornerRadius="4"
+                Margin="0,0,0,16">
+            <TextBlock Text="工作仪表板" 
+                       Foreground="{DynamicResource MaterialPrimaryMidForegroundBrush}"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- 仪表板内容 -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="16">
+                <!-- 快速操作卡片 - 放在最顶部 -->
+                <Border Background="White"
+                        CornerRadius="4"
+                        BoxShadow="0 2 8 0 #20000000"
+                        Padding="16">
+                    <Grid RowDefinitions="Auto,*">
+                        <StackPanel Grid.Row="0" 
+                                    Orientation="Horizontal" 
+                                    Spacing="8"
+                                    Margin="0,0,0,16">
+                            <icons:MaterialIcon Kind="Plus" Width="24" Height="24" Foreground="#6A1B9A"/>
+                            <TextBlock Text="快速操作" 
+                                       VerticalAlignment="Center"
+                                       Foreground="#6A1B9A"
+                                       FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <WrapPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button Classes="action-card" 
+                                    Command="{Binding NewAnnouncementCommand}"
+                                    Margin="0,0,8,8">
+                                <StackPanel>
+                                    <icons:MaterialIcon Kind="Announcement" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="#6A1B9A"/>
+                                    <TextBlock Text="新建公告" 
+                                               Margin="0,8,0,0" 
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="action-card" 
+                                    Command="{Binding NewTodoCommand}"
+                                    Margin="0,0,8,8">
+                                <StackPanel>
+                                    <icons:MaterialIcon Kind="CheckboxMarkedCircle" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="#2196F3"/>
+                                    <TextBlock Text="新建待办" 
+                                               Margin="0,8,0,0" 
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="action-card" 
+                                    Command="{Binding NewEmployeeCommand}"
+                                    Margin="0,0,8,8">
+                                <StackPanel>
+                                    <icons:MaterialIcon Kind="AccountPlus" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="#4CAF50"/>
+                                    <TextBlock Text="新增员工" 
+                                               Margin="0,8,0,0" 
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="action-card" 
+                                    Command="{Binding NewDepartmentCommand}"
+                                    Margin="0,0,8,8">
+                                <StackPanel>
+                                    <icons:MaterialIcon Kind="DomainPlus" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="#FF9800"/>
+                                    <TextBlock Text="新增部门" 
+                                               Margin="0,8,0,0" 
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="action-card" 
+                                    Command="{Binding NewPositionCommand}"
+                                    Margin="0,0,8,8">
+                                <StackPanel>
+                                    <icons:MaterialIcon Kind="WorkOutline" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="#F44336"/>
+                                    <TextBlock Text="新增职位" 
+                                               Margin="0,8,0,0" 
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="action-card" 
+                                    Command="{Binding NewAttendanceCommand}"
+                                    Margin="0,0,8,8">
+                                <StackPanel>
+                                    <icons:MaterialIcon Kind="CalendarPlus" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="#9C27B0"/>
+                                    <TextBlock Text="新增考勤" 
+                                               Margin="0,8,0,0" 
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="action-card" 
+                                    Command="{Binding NewSalaryCommand}"
+                                    Margin="0,0,8,8">
+                                <StackPanel>
+                                    <icons:MaterialIcon Kind="CashPlus" 
+                                                      Width="24" 
+                                                      Height="24" 
+                                                      Foreground="#795548"/>
+                                    <TextBlock Text="新增薪资" 
+                                               Margin="0,8,0,0" 
+                                               HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </WrapPanel>
+                    </Grid>
+                </Border>
+                <!-- 概览卡片行 -->
+                <Grid ColumnDefinitions="*,*,*,*" Margin="0,0,0,16">
+                    <!-- 员工总数卡片 -->
+                    <Border Grid.Column="0" 
+                            Background="White"
+                            CornerRadius="4"
+                            BoxShadow="0 2 8 0 #20000000"
+                            Margin="0,0,8,0"
+                            Padding="16">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8">
+                                <icons:MaterialIcon Kind="AccountMultiple" Width="24" Height="24" Foreground="#6A1B9A"/>
+                                <TextBlock Text="员工总数" 
+                                           VerticalAlignment="Center"
+                                           Foreground="#6A1B9A"
+                                           FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" 
+                                       Text="{Binding TotalEmployees}" 
+                                       FontSize="32"
+                                       Margin="0,16,0,8"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="2" 
+                                       Text="较上月增长 5%" 
+                                       FontSize="12"
+                                       Foreground="#43A047"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- 部门总数卡片 -->
+                    <Border Grid.Column="1" 
+                            Background="White"
+                            CornerRadius="4"
+                            BoxShadow="0 2 8 0 #20000000"
+                            Margin="8,0,8,0"
+                            Padding="16">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8">
+                                <icons:MaterialIcon Kind="Domain" Width="24" Height="24" Foreground="#2196F3"/>
+                                <TextBlock Text="部门总数" 
+                                           VerticalAlignment="Center"
+                                           Foreground="#2196F3"
+                                           FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" 
+                                       Text="{Binding TotalDepartments}" 
+                                       FontSize="32"
+                                       Margin="0,16,0,8"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="2" 
+                                       Text="本季度无变化" 
+                                       FontSize="12"
+                                       Foreground="#757575"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- 职位总数卡片 -->
+                    <Border Grid.Column="2" 
+                            Background="White"
+                            CornerRadius="4"
+                            BoxShadow="0 2 8 0 #20000000"
+                            Margin="8,0,8,0"
+                            Padding="16">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8">
+                                <icons:MaterialIcon Kind="WorkOutline" Width="24" Height="24" Foreground="#FF9800"/>
+                                <TextBlock Text="职位总数" 
+                                           VerticalAlignment="Center"
+                                           Foreground="#FF9800"
+                                           FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" 
+                                       Text="{Binding TotalPositions}" 
+                                       FontSize="32"
+                                       Margin="0,16,0,8"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="2" 
+                                       Text="本月新增 2 个" 
+                                       FontSize="12"
+                                       Foreground="#43A047"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- 缺勤率卡片 -->
+                    <Border Grid.Column="3" 
+                            Background="White"
+                            CornerRadius="4"
+                            BoxShadow="0 2 8 0 #20000000"
+                            Margin="8,0,0,0"
+                            Padding="16">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8">
+                                <icons:MaterialIcon Kind="CalendarAlert" Width="24" Height="24" Foreground="#F44336"/>
+                                <TextBlock Text="缺勤率" 
+                                           VerticalAlignment="Center"
+                                           Foreground="#F44336"
+                                           FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" 
+                                       Text="{Binding AbsenceRate, StringFormat='{}{0:P1}'}" 
+                                       FontSize="32"
+                                       Margin="0,16,0,8"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="2" 
+                                       Text="较上月下降 0.5%" 
+                                       FontSize="12"
+                                       Foreground="#43A047"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- 最近公告和待办事项 -->
+                <Grid ColumnDefinitions="2*,*" Margin="0,0,0,16">
+                    <!-- 最近公告 -->
+                    <Border Grid.Column="0" 
+                            Background="White"
+                            CornerRadius="4"
+                            BoxShadow="0 2 8 0 #20000000"
+                            Margin="0,0,8,0"
+                            Padding="16">
+                        <Grid RowDefinitions="Auto,*">
+                            <StackPanel Grid.Row="0" 
+                                        Orientation="Horizontal" 
+                                        Spacing="8"
+                                        Margin="0,0,0,16">
+                                <icons:MaterialIcon Kind="Announcement" Width="24" Height="24" Foreground="#6A1B9A"/>
+                                <TextBlock Text="最近公告" 
+                                           VerticalAlignment="Center"
+                                           Foreground="#6A1B9A"
+                                           FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <ItemsControl Grid.Row="1" 
+                                          ItemsSource="{Binding Announcements}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="8"
+                                                Margin="0,0,0,8"
+                                                BorderBrush="{DynamicResource MaterialDividerBrush}"
+                                                BorderThickness="0,0,0,1">
+                                            <Grid RowDefinitions="Auto,Auto">
+                                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                                    <TextBlock Text="{Binding Title}"
+                                                               FontWeight="SemiBold"/>
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding Date, StringFormat='{}{0:yyyy-MM-dd}'}"
+                                                               Foreground="#757575"/>
+                                                </Grid>
+                                                <TextBlock Grid.Row="1"
+                                                           Text="{Binding Content}"
+                                                           TextWrapping="Wrap"
+                                                           Margin="0,4,0,0"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Border>
+
+                    <!-- 待办事项 -->
+                    <Border Grid.Column="1" 
+                            Background="White"
+                            CornerRadius="4"
+                            BoxShadow="0 2 8 0 #20000000"
+                            Margin="8,0,0,0"
+                            Padding="16">
+                        <Grid RowDefinitions="Auto,*">
+                            <StackPanel Grid.Row="0" 
+                                        Orientation="Horizontal" 
+                                        Spacing="8"
+                                        Margin="0,0,0,16">
+                                <icons:MaterialIcon Kind="CheckboxMarkedCircleOutline" Width="24" Height="24" Foreground="#2196F3"/>
+                                <TextBlock Text="待办事项" 
+                                           VerticalAlignment="Center"
+                                           Foreground="#2196F3"
+                                           FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <ItemsControl Grid.Row="1" 
+                                          ItemsSource="{Binding Todos}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,*"
+                                              Margin="0,0,0,8">
+                                            <CheckBox Grid.Column="0"
+                                                      IsChecked="{Binding IsCompleted}"
+                                                      VerticalAlignment="Top"
+                                                      Margin="0,0,8,0"/>
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Task}"
+                                                       TextWrapping="Wrap"
+                                                       TextDecorations="{Binding IsCompleted, Converter={StaticResource BoolToStrikethroughConverter}}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- 员工分布图表 -->
+                <Border Background="White"
+                        CornerRadius="4"
+                        BoxShadow="0 2 8 0 #20000000"
+                        Padding="16">
+                    <Grid RowDefinitions="Auto,*">
+                        <StackPanel Grid.Row="0" 
+                                    Orientation="Horizontal" 
+                                    Spacing="8"
+                                    Margin="0,0,0,16">
+                            <icons:MaterialIcon Kind="ChartPie" Width="24" Height="24" Foreground="#FF9800"/>
+                            <TextBlock Text="员工部门分布" 
+                                       VerticalAlignment="Center"
+                                       Foreground="#FF9800"
+                                       FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+                            <!-- 这里应放置图表控件，暂时使用占位符 -->
+                                                        <Border Grid.Column="0"
+                                    Background="#F5F5F5"
+                                    Height="300"
+                                    CornerRadius="4">
+                                <TextBlock Text="图表区域 - 这里将使用实际的图表控件"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="#757575"/>
+                            </Border>
+                            
+                            <!-- 图例 -->
+                            <StackPanel Grid.Column="1"
+                                        Margin="16,0,0,0"
+                                        Spacing="8">
+                                <TextBlock Text="部门分布"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,8"/>
+                                
+                                <ItemsControl ItemsSource="{Binding DepartmentDistribution}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="Auto,*,Auto"
+                                                  Margin="0,0,0,4">
+                                                <Border Grid.Column="0"
+                                                        Width="16"
+                                                        Height="16"
+                                                        CornerRadius="2"
+                                                        Background="{Binding Color}"
+                                                        Margin="0,0,8,0"/>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Name}"
+                                                           VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Count}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="8,0,0,0"
+                                                           FontWeight="SemiBold"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
