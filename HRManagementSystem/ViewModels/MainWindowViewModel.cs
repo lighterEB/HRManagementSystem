@@ -4,17 +4,25 @@ namespace HRManagementSystem.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private object? _currentPage;
-        
-        public object? CurrentPage
+        private ViewModelBase _currentViewModel;
+
+        public ViewModelBase CurrentViewModel
         {
-            get => _currentPage;
-            set => this.RaiseAndSetIfChanged(ref _currentPage, value);
+            get => _currentViewModel;
+            private set => this.RaiseAndSetIfChanged(ref _currentViewModel, value);
         }
 
         public MainWindowViewModel()
         {
-            // 初始化
+            var loginViewModel = new LoginViewModel();
+            loginViewModel.LoginSuccessful += OnLoginSuccessful;
+            CurrentViewModel = loginViewModel;
+        }
+
+        private void OnLoginSuccessful(object? sender, System.EventArgs e)
+        {
+            // 切换到主界面
+            CurrentViewModel = new HomeViewModel();
         }
     }
 }

@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:HRManagementSystem.ViewModels"
+             x:Class="HRManagementSystem.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <Design.DataContext>
+        <vm:LoginViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          ColumnDefinitions="*,300,*">
+        
+        <StackPanel Grid.Row="1" 
+                    Grid.Column="1" 
+                    Spacing="20">
+            
+            <TextBlock Text="HR Management System"
+                       HorizontalAlignment="Center"
+                       FontSize="24"
+                       Margin="0,0,0,20"/>
+
+            <TextBox Text="{Binding Username}"
+                     Watermark="用户名"
+                     UseFloatingWatermark="True"/>
+
+            <TextBox Text="{Binding Password}"
+                     PasswordChar="●"
+                     Watermark="密码"
+                     UseFloatingWatermark="True"/>
+
+            <Button Content="登录"
+                    Command="{Binding LoginCommand}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"/>
+
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Foreground="Red"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center"/>
+
+            <ProgressBar IsIndeterminate="True"
+                         IsVisible="{Binding IsLoading}"
+                         HorizontalAlignment="Center"
+                         Width="100"
+                         Height="2"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

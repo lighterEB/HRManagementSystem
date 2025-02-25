@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:HRManagementSystem.ViewModels"
+             x:Class="HRManagementSystem.Views.HomeView"
+             x:DataType="vm:HomeViewModel">
+    
+    <Grid>
+        <TextBlock Text="{Binding WelcomeMessage}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="24"/>
+    </Grid>
+</UserControl>
