@@ -1,11 +1,17 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="HRManagementSystem.App"
-             xmlns:views="clr-namespace:HRManagementSystem.Views"
-             xmlns:vm="clr-namespace:HRManagementSystem.ViewModels"
+             xmlns:local="using:HRManagementSystem"
+             xmlns:converters="using:HRManagementSystem.Converters"
+             xmlns:vm="using:HRManagementSystem.ViewModels"
+             xmlns:views="using:HRManagementSystem.Views"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="HRManagementSystem.App"
              RequestedThemeVariant="Light">
 
+    <Application.Resources>
+        <converters:BoolToStrikethroughConverter x:Key="BoolToStrikethroughConverter"/>
+    </Application.Resources>
+  
     <Application.DataTemplates>
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <views:LoginView />
@@ -13,10 +19,37 @@
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
     </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme />
         <avalonia:MaterialIconStyles />
+        <!-- 按钮样式 -->
+        <Style Selector="Button.action-card">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="BorderBrush" Value="LightGray" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style Selector="Button.action-card:pointerover">
+            <Setter Property="Background" Value="#F5F5F5" />
+        </Style>
+        
+        <!-- 主要按钮样式 -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#6A1B9A" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#8E24AA" />
+        </Style>
     </Application.Styles>
 </Application>

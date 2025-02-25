@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
@@ -17,6 +18,14 @@ public class HomeViewModel : ViewModelBase
     private ViewModelBase _currentPage;
     private int _selectedIndex;
     private string _userName;
+    
+    private ObservableCollection<MenuItem> _menuItems;
+    
+    public ObservableCollection<MenuItem> MenuItems
+    {
+        get => _menuItems;
+        private set => this.RaiseAndSetIfChanged(ref _menuItems, value);
+    }
 
     public HomeViewModel(Window mainWindow, MainWindowViewModel mainWindowViewModel)
     {
@@ -24,10 +33,21 @@ public class HomeViewModel : ViewModelBase
         _mainWindowViewModel = mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
         _userName = "管理员";
         _selectedIndex = 0;
-        _currentPage = new DashboardViewModel();
+        _currentPage = new DashboardViewModel(_mainWindow);
 
         // 直接使用 DelegateCommand
         LogoutCommand = new DelegateCommand(OnLogout);
+        
+        // 初始化菜单项
+        _menuItems = new ObservableCollection<MenuItem>
+        {
+            new MenuItem { Title = "工作仪表盘", Icon = "ViewDashboard" },
+            new MenuItem { Title = "员工管理", Icon = "AccountMultiple" },
+            new MenuItem { Title = "部门管理", Icon = "Domain" },
+            new MenuItem { Title = "职位管理", Icon = "WorkOutline" },
+            new MenuItem { Title = "考勤管理", Icon = "CalendarClock" },
+            new MenuItem { Title = "薪资管理", Icon = "CashMultiple" }
+        };
     }
 
     public int SelectedIndex
@@ -87,21 +107,25 @@ public class HomeViewModel : ViewModelBase
     {
         CurrentPage = index switch
         {
-            0 => new DashboardViewModel(),
+            0 => new DashboardViewModel(_mainWindow),
             1 => new EmployeeViewModel(),
             2 => new DepartmentViewModel(),
             3 => new PositionViewModel(),
             4 => new AttendanceViewModel(),
             5 => new SalaryViewModel(),
-            _ => new DashboardViewModel()
+            _ => new DashboardViewModel(_mainWindow)
         };
+    }
+    
+    // 菜单项模型
+    public class MenuItem
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
     }
 }
 
 // 临时的视图模型类
-public class DashboardViewModel : ViewModelBase
-{
-}
 
 public class EmployeeViewModel : ViewModelBase
 {
