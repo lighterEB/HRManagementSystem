@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:icons="using:Material.Icons.Avalonia"
+        x:Class="HRManagementSystem.Views.Dialogs.InfoDialog"
+        Title="信息"
+        Width="400"
+        Height="200"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+
+    <Grid RowDefinitions="*,Auto" Margin="20">
+        <Grid Grid.Row="0" RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+            <icons:MaterialIcon Grid.Row="0" Grid.Column="0"
+                                Kind="Information"
+                                Width="32"
+                                Height="32"
+                                Foreground="#2196F3"
+                                Margin="0,0,16,0"/>
+            
+            <TextBlock Grid.Row="0" Grid.Column="1"
+                       x:Name="TitleTextBlock"
+                       FontSize="18"
+                       FontWeight="SemiBold"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Center"/>
+            
+            <TextBlock Grid.Row="1" Grid.Column="1"
+                       x:Name="MessageTextBlock"
+                       Margin="0,16,0,0"
+                       TextWrapping="Wrap"/>
+        </Grid>
+        
+        <Button Grid.Row="1"
+                Content="确定"
+                HorizontalAlignment="Right"
+                Click="OkButton_Click"/>
+    </Grid>
+</Window>
