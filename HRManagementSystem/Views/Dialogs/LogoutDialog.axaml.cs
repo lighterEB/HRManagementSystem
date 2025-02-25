@@ -1,25 +1,23 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace HRManagementSystem.Views.Dialogs
+namespace HRManagementSystem.Views.Dialogs;
+
+public partial class LogoutDialog : Window
 {
-    public partial class LogoutDialog : Window
+    public LogoutDialog()
     {
-        public bool ShouldLogout { get; private set; }
+        InitializeComponent();
+        WindowStartupLocation = WindowStartupLocation.CenterOwner;
+    }
 
-        public LogoutDialog()
-        {
-            InitializeComponent();
-        }
+    private void ConfirmClick(object sender, RoutedEventArgs e)
+    {
+        Close(true);
+    }
 
-        private void OnCancelClick(object? sender, RoutedEventArgs e)
-        {
-            Close(false);
-        }
-
-        private void OnConfirmClick(object? sender, RoutedEventArgs e)
-        {
-            Close(true);
-        }
+    private void CancelClick(object sender, RoutedEventArgs e)
+    {
+        Close(false);
     }
 }

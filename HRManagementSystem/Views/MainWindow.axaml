@@ -1,19 +1,18 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:HRManagementSystem.ViewModels"
-        xmlns:views="using:HRManagementSystem.Views"
         x:Class="HRManagementSystem.Views.MainWindow"
-        x:DataType="vm:HomeViewModel"
+        x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="人力资源管理系统"
         WindowStartupLocation="CenterScreen"
-        Width="1200"
-        Height="800"
+        Width="{Binding WindowWidth}"
+        Height="{Binding WindowHeight}"
         MinWidth="1000"
         MinHeight="600"
-        Background="#F3E5F5">
+        CanResize="{Binding CanResize}">
 
     <Panel>
-        <views:HomeView />
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Panel>
 </Window>

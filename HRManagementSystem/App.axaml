@@ -5,7 +5,6 @@
              xmlns:vm="clr-namespace:HRManagementSystem.ViewModels"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              RequestedThemeVariant="Light">
-    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">

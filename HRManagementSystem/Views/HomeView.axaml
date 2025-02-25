@@ -120,7 +120,7 @@
                                 Padding="8,4"
                                 CornerRadius="4"
                                 Background="Transparent"
-                                Command="{Binding LogoutCommand}"
+                                Command="{Binding LogoutCommand, FallbackValue={x:Null}}"
                                 ToolTip.Tip="退出登录">
                             <icons:MaterialIcon Kind="Logout"
                                                 Width="20"

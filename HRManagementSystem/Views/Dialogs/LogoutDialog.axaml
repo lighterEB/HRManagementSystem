@@ -1,59 +1,44 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:icons="using:Material.Icons.Avalonia"
         x:Class="HRManagementSystem.Views.Dialogs.LogoutDialog"
         Title="退出登录"
         Width="300"
         Height="150"
-        WindowStartupLocation="CenterOwner"
         CanResize="False"
-        SystemDecorations="None"
-        Background="Transparent"
-        ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner">
 
-    <Border Background="White"
-            CornerRadius="8"
-            BoxShadow="0 4 8 0 #20000000">
-        <Grid RowDefinitions="Auto,*,Auto">
-            <!-- 标题栏 -->
-            <Grid Grid.Row="0" 
-                  Height="48" 
-                  Margin="16,0"
-                  ColumnDefinitions="Auto,*">
-                <icons:MaterialIcon Kind="AlertCircleOutline"
-                                  Width="24"
-                                  Height="24"
-                                  Foreground="#6A1B9A"/>
-                <TextBlock Grid.Column="1"
-                          Text="确认退出"
-                          VerticalAlignment="Center"
-                          Margin="8,0"
-                          FontSize="16"
-                          FontWeight="Medium"/>
-            </Grid>
+    <Window.Styles>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#6A1B9A" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
 
-            <!-- 内容 -->
-            <TextBlock Grid.Row="1"
-                      Text="是否确认退出登录？"
-                      Margin="16,0"
-                      VerticalAlignment="Center"/>
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#4A148C" />
+        </Style>
 
-            <!-- 按钮 -->
-            <StackPanel Grid.Row="2"
-                      Orientation="Horizontal"
-                      HorizontalAlignment="Right"
-                      Margin="16"
-                      Spacing="8">
-                <Button Content="取消"
-                        Width="80"
-                        Height="32"
-                        Click="OnCancelClick"/>
-                <Button Content="确定"
-                        Width="80"
-                        Height="32"
-                        Classes="primary"
-                        Click="OnConfirmClick"/>
-            </StackPanel>
-        </Grid>
-    </Border>
+        <Style Selector="Button">
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="MinWidth" Value="80" />
+        </Style>
+    </Window.Styles>
+
+    <StackPanel Margin="20" Spacing="20">
+        <TextBlock Text="确定要退出登录吗？"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="10">
+            <Button Content="确定"
+                    Classes="primary"
+                    Click="ConfirmClick" />
+            <Button Content="取消"
+                    Click="CancelClick" />
+        </StackPanel>
+    </StackPanel>
 </Window>
