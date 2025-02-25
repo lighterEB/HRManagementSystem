@@ -8,24 +8,24 @@
 
     <UserControl.Styles>
         <Style Selector="TextBox">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="Margin" Value="0,8"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Padding" Value="35,8,8,8"/>
+            <Setter Property="Height" Value="40" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Padding" Value="35,8,8,8" />
         </Style>
-        
+
         <Style Selector="Button.primary">
-            <Setter Property="Background" Value="#6A1B9A"/>  <!-- 深紫色按钮 -->
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Margin" Value="0,16"/>
-            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Background" Value="#6A1B9A" />  <!-- 深紫色按钮 -->
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="0,16" />
+            <Setter Property="Padding" Value="16,8" />
         </Style>
-        
+
         <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="#4A148C"/>  <!-- 更深的紫色 -->
+            <Setter Property="Background" Value="#4A148C" />  <!-- 更深的紫色 -->
         </Style>
     </UserControl.Styles>
 
@@ -36,75 +36,75 @@
                 BoxShadow="0 2 10 0 #20000000">
             <Grid RowDefinitions="Auto,*,Auto"
                   Margin="32,24">
-                
+
                 <!-- 标题区域 -->
-                <StackPanel Grid.Row="0" 
+                <StackPanel Grid.Row="0"
                             Spacing="16"
                             Margin="0,0,0,32">
                     <!-- 图标组合 -->
                     <Grid Width="80" Height="80">
                         <!-- 背景圆圈组 -->
-                        <Ellipse Width="80" 
-                                 Height="80" 
-                                 Fill="#F3E5F5"/>
-                        <Ellipse Width="60" 
-                                 Height="60" 
-                                 Fill="#E1BEE7"/>
-                        <Ellipse Width="40" 
-                                 Height="40" 
-                                 Fill="#CE93D8"/>
-        
+                        <Ellipse Width="80"
+                                 Height="80"
+                                 Fill="#F3E5F5" />
+                        <Ellipse Width="60"
+                                 Height="60"
+                                 Fill="#E1BEE7" />
+                        <Ellipse Width="40"
+                                 Height="40"
+                                 Fill="#CE93D8" />
+
                         <!-- 主图标 -->
                         <icons:MaterialIcon Kind="AccountGroup"
                                             Width="48"
                                             Height="48"
-                                            Foreground="#6A1B9A"/>
+                                            Foreground="#6A1B9A" />
                     </Grid>
-    
+
                     <TextBlock Text="用户登录"
                                HorizontalAlignment="Center"
                                FontSize="20"
                                FontWeight="Medium"
-                               Foreground="#6A1B9A"/>
+                               Foreground="#6A1B9A" />
                 </StackPanel>
 
                 <!-- 登录表单 -->
-                <StackPanel Grid.Row="1" 
-                           Spacing="16">
-                    
+                <StackPanel Grid.Row="1"
+                            Spacing="16">
+
                     <!-- 用户名输入框 -->
                     <Grid>
                         <icons:MaterialIcon Kind="Account"
-                                          Width="20"
-                                          Height="20"
-                                          Margin="8,0"
-                                          Foreground="#9575CD"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"/>
+                                            Width="20"
+                                            Height="20"
+                                            Margin="8,0"
+                                            Foreground="#9575CD"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
                         <TextBox Text="{Binding Username}"
-                                Watermark="用户名"/>
+                                 Watermark="用户名" />
                     </Grid>
 
                     <!-- 密码输入框 -->
                     <Grid>
                         <icons:MaterialIcon Kind="Lock"
-                                          Width="20"
-                                          Height="20"
-                                          Margin="8,0"
-                                          Foreground="#9575CD"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"/>
+                                            Width="20"
+                                            Height="20"
+                                            Margin="8,0"
+                                            Foreground="#9575CD"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
                         <TextBox Text="{Binding Password}"
-                                PasswordChar="●"
-                                Watermark="密码"/>
+                                 PasswordChar="●"
+                                 Watermark="密码" />
                     </Grid>
 
                     <!-- 错误消息 -->
                     <TextBlock Text="{Binding ErrorMessage}"
-                              Foreground="#D32F2F"
-                              TextWrapping="Wrap"
-                              IsVisible="{Binding ErrorMessage, 
-                                         Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                               Foreground="#D32F2F"
+                               TextWrapping="Wrap"
+                               IsVisible="{Binding ErrorMessage, 
+                                         Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
 
                     <!-- 登录按钮 -->
                     <Button Content="登 录"
@@ -114,31 +114,31 @@
                             HorizontalContentAlignment="Center">
                         <Button.IsEnabled>
                             <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                <Binding Path="!IsLoading"/>
-                                <Binding Path="Username" 
-                                        Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
-                                <Binding Path="Password" 
-                                        Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+                                <Binding Path="!IsLoading" />
+                                <Binding Path="Username"
+                                         Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                                <Binding Path="Password"
+                                         Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
                             </MultiBinding>
                         </Button.IsEnabled>
                     </Button>
 
                     <!-- 加载指示器 -->
                     <ProgressBar IsIndeterminate="True"
-                                IsVisible="{Binding IsLoading}"
-                                HorizontalAlignment="Stretch"
-                                Height="2"
-                                Foreground="#6A1B9A"
-                                Margin="0,8"/>
+                                 IsVisible="{Binding IsLoading}"
+                                 HorizontalAlignment="Stretch"
+                                 Height="2"
+                                 Foreground="#6A1B9A"
+                                 Margin="0,8" />
                 </StackPanel>
 
                 <!-- 底部信息 -->
                 <TextBlock Grid.Row="2"
-                          Text="LighterEB© 2025 人力资源管理系统仅供学习参考"
-                          Foreground="#9575CD"
-                          FontSize="12"
-                          HorizontalAlignment="Center"
-                          Margin="0,24,0,0"/>
+                           Text="LighterEB© 2025 人力资源管理系统仅供学习参考"
+                           Foreground="#9575CD"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           Margin="0,24,0,0" />
             </Grid>
         </Border>
     </Grid>

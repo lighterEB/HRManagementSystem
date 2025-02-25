@@ -5,27 +5,51 @@
              x:Class="HRManagementSystem.Views.HomeView"
              x:DataType="vm:HomeViewModel">
 
+    <UserControl.Styles>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#6A1B9A" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="16,8" />
+        </Style>
+
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#4A148C" />
+        </Style>
+
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Margin" Value="0,2" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected">
+            <Setter Property="Background" Value="#F3E5F5" />
+            <Setter Property="TextBlock.Foreground" Value="#6A1B9A" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid ColumnDefinitions="240,*">
         <!-- 侧边栏 -->
-        <Border Grid.Column="0" 
+        <Border Grid.Column="0"
                 Background="White"
                 BoxShadow="2 0 10 0 #20000000">
             <Grid RowDefinitions="Auto,*,Auto">
                 <!-- 顶部Logo -->
-                <StackPanel Grid.Row="0" 
-                           Margin="16,24"
-                           Spacing="12">
+                <StackPanel Grid.Row="0"
+                            Margin="16,24"
+                            Spacing="12">
                     <Grid Width="48" Height="48">
-                        <Ellipse Fill="#F3E5F5"/>
+                        <Ellipse Fill="#F3E5F5" />
                         <icons:MaterialIcon Kind="AccountGroup"
-                                          Width="32"
-                                          Height="32"
-                                          Foreground="#6A1B9A"/>
+                                            Width="32"
+                                            Height="32"
+                                            Foreground="#6A1B9A" />
                     </Grid>
                     <TextBlock Text="人力资源管理系统"
-                             FontSize="16"
-                             FontWeight="Medium"
-                             Foreground="#6A1B9A"/>
+                               FontSize="16"
+                               FontWeight="Medium"
+                               Foreground="#6A1B9A" />
                 </StackPanel>
 
                 <!-- 导航菜单 -->
@@ -33,57 +57,45 @@
                          Margin="8,0"
                          SelectedIndex="{Binding SelectedIndex}"
                          Background="Transparent">
-                    <ListBox.Styles>
-                        <Style Selector="ListBoxItem">
-                            <Setter Property="Padding" Value="12,8"/>
-                            <Setter Property="CornerRadius" Value="4"/>
-                            <Setter Property="Margin" Value="0,2"/>
-                        </Style>
-                        <Style Selector="ListBoxItem:selected">
-                            <Setter Property="Background" Value="#F3E5F5"/>
-                            <Setter Property="TextBlock.Foreground" Value="#6A1B9A"/>
-                        </Style>
-                    </ListBox.Styles>
-
                     <ListBoxItem>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <icons:MaterialIcon Kind="ViewDashboard"/>
-                            <TextBlock Text="工作台"/>
+                            <icons:MaterialIcon Kind="ViewDashboard" />
+                            <TextBlock Text="工作台" />
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <icons:MaterialIcon Kind="AccountMultiple"/>
-                            <TextBlock Text="员工管理"/>
+                            <icons:MaterialIcon Kind="AccountMultiple" />
+                            <TextBlock Text="员工管理" />
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <icons:MaterialIcon Kind="OfficeBuildingOutline"/>
-                            <TextBlock Text="部门管理"/>
+                            <icons:MaterialIcon Kind="OfficeBuildingOutline" />
+                            <TextBlock Text="部门管理" />
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <icons:MaterialIcon Kind="BadgeAccountOutline"/>
-                            <TextBlock Text="职位管理"/>
+                            <icons:MaterialIcon Kind="BadgeAccountOutline" />
+                            <TextBlock Text="职位管理" />
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <icons:MaterialIcon Kind="CalendarClock"/>
-                            <TextBlock Text="考勤管理"/>
+                            <icons:MaterialIcon Kind="CalendarClock" />
+                            <TextBlock Text="考勤管理" />
                         </StackPanel>
                     </ListBoxItem>
 
                     <ListBoxItem>
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <icons:MaterialIcon Kind="CashMultiple"/>
-                            <TextBlock Text="薪资管理"/>
+                            <icons:MaterialIcon Kind="CashMultiple" />
+                            <TextBlock Text="薪资管理" />
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>
@@ -96,21 +108,23 @@
                         Background="#F3E5F5">
                     <Grid ColumnDefinitions="Auto,*,Auto">
                         <icons:MaterialIcon Grid.Column="0"
-                                          Kind="Account"
-                                          Width="24"
-                                          Height="24"
-                                          Foreground="#6A1B9A"/>
+                                            Kind="Account"
+                                            Width="24"
+                                            Height="24"
+                                            Foreground="#6A1B9A" />
                         <TextBlock Grid.Column="1"
-                                 Text="{Binding UserName}"
-                                 Margin="12,0"
-                                 VerticalAlignment="Center"/>
+                                   Text="{Binding UserName}"
+                                   Margin="12,0"
+                                   VerticalAlignment="Center" />
                         <Button Grid.Column="2"
                                 Padding="8,4"
                                 CornerRadius="4"
-                                Background="Transparent">
+                                Background="Transparent"
+                                Command="{Binding LogoutCommand}"
+                                ToolTip.Tip="退出登录">
                             <icons:MaterialIcon Kind="Logout"
-                                              Width="20"
-                                              Height="20"/>
+                                                Width="20"
+                                                Height="20" />
                         </Button>
                     </Grid>
                 </Border>
@@ -127,19 +141,18 @@
                 <Grid Margin="24,0"
                       ColumnDefinitions="Auto,*,Auto">
                     <TextBlock Grid.Column="0"
-                             Text="工作台"
-                             VerticalAlignment="Center"
-                             FontSize="20"
-                             FontWeight="Medium"/>
-                    
+                               Text="工作台"
+                               VerticalAlignment="Center"
+                               FontSize="20"
+                               FontWeight="Medium" />
+
                     <StackPanel Grid.Column="2"
-                              Orientation="Horizontal"
-                              Spacing="16">
-                        <Button Classes="primary"
-                                Padding="16,8">
+                                Orientation="Horizontal"
+                                Spacing="16">
+                        <Button Classes="primary">
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <icons:MaterialIcon Kind="Plus"/>
-                                <TextBlock Text="新建"/>
+                                <icons:MaterialIcon Kind="Plus" />
+                                <TextBlock Text="新建" />
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -148,8 +161,8 @@
 
             <!-- 页面内容 -->
             <ContentControl Grid.Row="1"
-                          Content="{Binding CurrentPage}"
-                          Margin="24"/>
+                            Content="{Binding CurrentPage}"
+                            Margin="24" />
         </Grid>
     </Grid>
 </UserControl>

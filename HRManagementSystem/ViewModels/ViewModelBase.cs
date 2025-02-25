@@ -1,8 +1,7 @@
 ﻿using ReactiveUI;
 
-namespace HRManagementSystem.ViewModels
+namespace HRManagementSystem.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
 }
