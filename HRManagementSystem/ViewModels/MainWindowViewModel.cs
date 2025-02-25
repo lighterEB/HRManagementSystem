@@ -1,10 +1,13 @@
 ﻿using ReactiveUI;
+using System;
 
 namespace HRManagementSystem.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
         private ViewModelBase _currentViewModel;
+        
+        public event EventHandler? LoginSuccessful;
 
         public ViewModelBase CurrentViewModel
         {
@@ -19,10 +22,10 @@ namespace HRManagementSystem.ViewModels
             CurrentViewModel = loginViewModel;
         }
 
-        private void OnLoginSuccessful(object? sender, System.EventArgs e)
+        private void OnLoginSuccessful(object? sender, EventArgs e)
         {
-            // 切换到主界面
             CurrentViewModel = new HomeViewModel();
+            LoginSuccessful?.Invoke(this, EventArgs.Empty);
         }
     }
 }

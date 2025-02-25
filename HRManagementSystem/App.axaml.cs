@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using HRManagementSystem.ViewModels;
 using HRManagementSystem.Views;
 
 namespace HRManagementSystem
@@ -17,10 +16,7 @@ namespace HRManagementSystem
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
+                desktop.MainWindow = new LoginWindow();
             }
 
             base.OnFrameworkInitializationCompleted();

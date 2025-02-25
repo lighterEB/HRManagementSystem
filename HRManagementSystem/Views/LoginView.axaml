@@ -1,49 +1,145 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:HRManagementSystem.ViewModels"
+             xmlns:icons="using:Material.Icons.Avalonia"
              x:Class="HRManagementSystem.Views.LoginView"
-             x:DataType="vm:LoginViewModel">
+             x:DataType="vm:LoginViewModel"
+             Background="#F3E5F5">  <!-- 浅紫色背景 -->
 
-    <Design.DataContext>
-        <vm:LoginViewModel />
-    </Design.DataContext>
-
-    <Grid RowDefinitions="Auto,*,Auto"
-          ColumnDefinitions="*,300,*">
+    <UserControl.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="0,8"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Padding" Value="35,8,8,8"/>
+        </Style>
         
-        <StackPanel Grid.Row="1" 
-                    Grid.Column="1" 
-                    Spacing="20">
-            
-            <TextBlock Text="HR Management System"
-                       HorizontalAlignment="Center"
-                       FontSize="24"
-                       Margin="0,0,0,20"/>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#6A1B9A"/>  <!-- 深紫色按钮 -->
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="0,16"/>
+            <Setter Property="Padding" Value="16,8"/>
+        </Style>
+        
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#4A148C"/>  <!-- 更深的紫色 -->
+        </Style>
+    </UserControl.Styles>
 
-            <TextBox Text="{Binding Username}"
-                     Watermark="用户名"
-                     UseFloatingWatermark="True"/>
+    <Grid>
+        <Border Background="White"
+                CornerRadius="8"
+                Width="360"
+                BoxShadow="0 2 10 0 #20000000">
+            <Grid RowDefinitions="Auto,*,Auto"
+                  Margin="32,24">
+                
+                <!-- 标题区域 -->
+                <StackPanel Grid.Row="0" 
+                            Spacing="16"
+                            Margin="0,0,0,32">
+                    <!-- 图标组合 -->
+                    <Grid Width="80" Height="80">
+                        <!-- 背景圆圈组 -->
+                        <Ellipse Width="80" 
+                                 Height="80" 
+                                 Fill="#F3E5F5"/>
+                        <Ellipse Width="60" 
+                                 Height="60" 
+                                 Fill="#E1BEE7"/>
+                        <Ellipse Width="40" 
+                                 Height="40" 
+                                 Fill="#CE93D8"/>
+        
+                        <!-- 主图标 -->
+                        <icons:MaterialIcon Kind="AccountGroup"
+                                            Width="48"
+                                            Height="48"
+                                            Foreground="#6A1B9A"/>
+                    </Grid>
+    
+                    <TextBlock Text="用户登录"
+                               HorizontalAlignment="Center"
+                               FontSize="20"
+                               FontWeight="Medium"
+                               Foreground="#6A1B9A"/>
+                </StackPanel>
 
-            <TextBox Text="{Binding Password}"
-                     PasswordChar="●"
-                     Watermark="密码"
-                     UseFloatingWatermark="True"/>
+                <!-- 登录表单 -->
+                <StackPanel Grid.Row="1" 
+                           Spacing="16">
+                    
+                    <!-- 用户名输入框 -->
+                    <Grid>
+                        <icons:MaterialIcon Kind="Account"
+                                          Width="20"
+                                          Height="20"
+                                          Margin="8,0"
+                                          Foreground="#9575CD"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Username}"
+                                Watermark="用户名"/>
+                    </Grid>
 
-            <Button Content="登录"
-                    Command="{Binding LoginCommand}"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"/>
+                    <!-- 密码输入框 -->
+                    <Grid>
+                        <icons:MaterialIcon Kind="Lock"
+                                          Width="20"
+                                          Height="20"
+                                          Margin="8,0"
+                                          Foreground="#9575CD"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Password}"
+                                PasswordChar="●"
+                                Watermark="密码"/>
+                    </Grid>
 
-            <TextBlock Text="{Binding ErrorMessage}"
-                       Foreground="Red"
-                       TextWrapping="Wrap"
-                       HorizontalAlignment="Center"/>
+                    <!-- 错误消息 -->
+                    <TextBlock Text="{Binding ErrorMessage}"
+                              Foreground="#D32F2F"
+                              TextWrapping="Wrap"
+                              IsVisible="{Binding ErrorMessage, 
+                                         Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
 
-            <ProgressBar IsIndeterminate="True"
-                         IsVisible="{Binding IsLoading}"
-                         HorizontalAlignment="Center"
-                         Width="100"
-                         Height="2"/>
-        </StackPanel>
+                    <!-- 登录按钮 -->
+                    <Button Content="登 录"
+                            Command="{Binding LoginCommand}"
+                            Classes="primary"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center">
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsLoading"/>
+                                <Binding Path="Username" 
+                                        Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+                                <Binding Path="Password" 
+                                        Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+
+                    <!-- 加载指示器 -->
+                    <ProgressBar IsIndeterminate="True"
+                                IsVisible="{Binding IsLoading}"
+                                HorizontalAlignment="Stretch"
+                                Height="2"
+                                Foreground="#6A1B9A"
+                                Margin="0,8"/>
+                </StackPanel>
+
+                <!-- 底部信息 -->
+                <TextBlock Grid.Row="2"
+                          Text="LighterEB© 2025 人力资源管理系统仅供学习参考"
+                          Foreground="#9575CD"
+                          FontSize="12"
+                          HorizontalAlignment="Center"
+                          Margin="0,24,0,0"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

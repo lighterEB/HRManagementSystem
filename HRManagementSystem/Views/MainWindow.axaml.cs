@@ -1,12 +1,14 @@
 using Avalonia.Controls;
+using HRManagementSystem.ViewModels;
 
-namespace HRManagementSystem.Views;
-
-public partial class MainWindow : Window
+namespace HRManagementSystem.Views
 {
-    public MainWindow()
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = new HomeViewModel();
+        }
     }
-    
 }
