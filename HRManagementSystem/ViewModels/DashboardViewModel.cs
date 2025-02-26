@@ -276,10 +276,22 @@ namespace HRManagementSystem.ViewModels
     }
 
     // 待办事项模型
-    public class TodoItem
+    public class TodoItem : ReactiveObject
     {
-        public string Task { get; set; } = string.Empty;
-        public bool IsCompleted { get; set; }
+        private string _task = string.Empty;
+        private bool _isCompleted;
+    
+        public string Task
+        {
+            get => _task;
+            set => this.RaiseAndSetIfChanged(ref _task, value);
+        }
+    
+        public bool IsCompleted
+        {
+            get => _isCompleted;
+            set => this.RaiseAndSetIfChanged(ref _isCompleted, value);
+        }
     }
 
     // 部门分布项模型
