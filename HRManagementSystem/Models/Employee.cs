@@ -1,46 +1,69 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace HRManagementSystem.Models;
-
-public class Employee
+namespace HRManagementSystem.Models
 {
-    public int Id { get; init; }
-
-    [Required] [StringLength(20)] public string EmployeeNumber { get; init; } = string.Empty;
-
-    [Required] [StringLength(50)] public string FirstName { get; set; } = string.Empty;
-
-    [Required] [StringLength(50)] public string LastName { get; set; } = string.Empty;
-
-    [Required]
-    [StringLength(100)]
-    [EmailAddress]
-    public string Email { get; set; } = string.Empty;
-
-    [StringLength(20)] public string Phone { get; set; } = string.Empty;
-
-    public DateTime DateOfBirth { get; init; }
-
-    public DateTime HireDate { get; init; }
-
-    public int DepartmentId { get; set; }
-    public Department Department { get; set; } = null!;
-
-    public int PositionId { get; set; }
-    public Position Position { get; set; } = null!;
-
-    public string? UserId { get; set; }
-    public User? User { get; set; }
-
-    public EmployeeStatus Status { get; set; }
-
-    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
-}
-
-public enum EmployeeStatus
-{
-    Active,
-    OnLeave,
-    Terminated
+    public class Employee
+    {
+        public int Id { get; set; }
+        
+        [Required]
+        [StringLength(20)]
+        public string EmployeeNumber { get; set; } = string.Empty;
+        
+        [Required]
+        [StringLength(50)]
+        public string FirstName { get; set; } = string.Empty;
+        
+        [Required]
+        [StringLength(50)]
+        public string LastName { get; set; } = string.Empty;
+        
+        [StringLength(10)]
+        public string? Gender { get; set; }
+        
+        public DateTime? BirthDate { get; set; }
+        
+        [StringLength(18)]
+        public string? IdCardNumber { get; set; }
+        
+        [Required]
+        [StringLength(100)]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+        
+        [StringLength(20)]
+        public string? Phone { get; set; }
+        
+        [StringLength(255)]
+        public string? Address { get; set; }
+        
+        public int? DepartmentId { get; set; }
+        public Department? Department { get; set; }
+        
+        public int? PositionId { get; set; }
+        public Position? Position { get; set; }
+        
+        public int? ManagerId { get; set; }
+        public Employee? Manager { get; set; }
+        
+        [Required]
+        public DateTime HireDate { get; set; }
+        
+        [Required]
+        [StringLength(20)]
+        public string Status { get; set; } = "Active";
+        
+        public DateTime? TerminationDate { get; set; }
+        
+        [StringLength(255)]
+        public string? Photo { get; set; }
+        
+        public string? UserId { get; set; }
+        public User? User { get; set; }
+        
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
 }
