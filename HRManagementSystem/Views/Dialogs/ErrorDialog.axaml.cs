@@ -16,7 +16,7 @@ public partial class ErrorDialog : Window
         if (errorTitle != null) errorTitle.Text = title;
         if (errorMessage != null) errorMessage.Text = message;
     }
-    
+
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);

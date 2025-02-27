@@ -14,32 +14,32 @@
                    Text="新建待办事项"
                    FontSize="20"
                    FontWeight="SemiBold"
-                   Margin="0,0,0,20"/>
-        
+                   Margin="0,0,0,20" />
+
         <StackPanel Grid.Row="1" Spacing="16">
             <TextBlock Text="待办内容"
-                       FontWeight="SemiBold"/>
+                       FontWeight="SemiBold" />
             <TextBox x:Name="TaskTextBox"
                      Watermark="请输入待办事项内容"
                      Text="{Binding Task}"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
-                     Height="80"/>
-            
+                     Height="80" />
+
             <CheckBox Content="已完成"
-                      IsChecked="{Binding IsCompleted}"/>
+                      IsChecked="{Binding IsCompleted}" />
         </StackPanel>
-        
+
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Spacing="8"
                     Margin="0,20,0,0">
             <Button Content="取消"
-                    Click="CancelButton_Click"/>
+                    Click="CancelButton_Click" />
             <Button Content="确定"
                     Click="OkButton_Click"
-                    Classes="accent"/>
+                    Classes="accent" />
         </StackPanel>
     </Grid>
 </Window>

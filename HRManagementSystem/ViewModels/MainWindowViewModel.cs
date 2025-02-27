@@ -77,17 +77,16 @@ public class MainWindowViewModel : ViewModelBase
         WindowWidth = 1200;
         WindowHeight = 800;
         CanResize = true;
-        
+
         // 确保窗口应用新的尺寸和属性
         if (_window != null)
-        {
-            Dispatcher.UIThread.Post(() => {
+            Dispatcher.UIThread.Post(() =>
+            {
                 _window.Width = WindowWidth;
                 _window.Height = WindowHeight;
-                _window.CanResize = true;  // 直接设置为 true
+                _window.CanResize = true; // 直接设置为 true
             });
-        }
-        
+
         CurrentViewModel = new HomeViewModel(_window!, this);
     }
 }

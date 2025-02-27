@@ -16,16 +16,10 @@ public class HomeViewModel : ViewModelBase
     private readonly Window _mainWindow;
     private readonly MainWindowViewModel _mainWindowViewModel;
     private ViewModelBase _currentPage;
+
+    private ObservableCollection<MenuItem> _menuItems;
     private int _selectedIndex;
     private string _userName;
-    
-    private ObservableCollection<MenuItem> _menuItems;
-    
-    public ObservableCollection<MenuItem> MenuItems
-    {
-        get => _menuItems;
-        private set => this.RaiseAndSetIfChanged(ref _menuItems, value);
-    }
 
     public HomeViewModel(Window mainWindow, MainWindowViewModel mainWindowViewModel)
     {
@@ -37,17 +31,23 @@ public class HomeViewModel : ViewModelBase
 
         // 直接使用 DelegateCommand
         LogoutCommand = new DelegateCommand(OnLogout);
-        
+
         // 初始化菜单项
         _menuItems = new ObservableCollection<MenuItem>
         {
-            new MenuItem { Title = "工作仪表盘", Icon = "ViewDashboard" },
-            new MenuItem { Title = "员工管理", Icon = "AccountMultiple" },
-            new MenuItem { Title = "部门管理", Icon = "Domain" },
-            new MenuItem { Title = "职位管理", Icon = "WorkOutline" },
-            new MenuItem { Title = "考勤管理", Icon = "CalendarClock" },
-            new MenuItem { Title = "薪资管理", Icon = "CashMultiple" }
+            new() { Title = "工作仪表盘", Icon = "ViewDashboard" },
+            new() { Title = "员工管理", Icon = "AccountMultiple" },
+            new() { Title = "部门管理", Icon = "Domain" },
+            new() { Title = "职位管理", Icon = "WorkOutline" },
+            new() { Title = "考勤管理", Icon = "CalendarClock" },
+            new() { Title = "薪资管理", Icon = "CashMultiple" }
         };
+    }
+
+    public ObservableCollection<MenuItem> MenuItems
+    {
+        get => _menuItems;
+        private set => this.RaiseAndSetIfChanged(ref _menuItems, value);
     }
 
     public int SelectedIndex
@@ -116,7 +116,7 @@ public class HomeViewModel : ViewModelBase
             _ => new DashboardViewModel(_mainWindow)
         };
     }
-    
+
     // 菜单项模型
     public class MenuItem
     {

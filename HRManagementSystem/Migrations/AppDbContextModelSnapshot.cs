@@ -275,7 +275,7 @@ namespace HRManagementSystem.Migrations
                     b.Property<int?>("ManagerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
@@ -317,6 +317,89 @@ namespace HRManagementSystem.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Employees", (string)null);
+                });
+
+            modelBuilder.Entity("HRManagementSystem.Models.Identity.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastLoginTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RealName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("HRManagementSystem.Models.LeaveRequest", b =>
@@ -661,89 +744,6 @@ namespace HRManagementSystem.Migrations
                     b.ToTable("TodoItems", (string)null);
                 });
 
-            modelBuilder.Entity("HRManagementSystem.Models.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("Users", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -848,7 +848,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("HRManagementSystem.Models.Announcement", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.User", "CreatedBy")
+                    b.HasOne("HRManagementSystem.Models.Identity.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -859,7 +859,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("HRManagementSystem.Models.Attendance", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.User", "CreatedBy")
+                    b.HasOne("HRManagementSystem.Models.Identity.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -877,7 +877,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("HRManagementSystem.Models.AuditLog", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.User", "User")
+                    b.HasOne("HRManagementSystem.Models.Identity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -919,7 +919,7 @@ namespace HRManagementSystem.Migrations
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("HRManagementSystem.Models.User", "User")
+                    b.HasOne("HRManagementSystem.Models.Identity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -933,6 +933,15 @@ namespace HRManagementSystem.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HRManagementSystem.Models.Identity.User", b =>
+                {
+                    b.HasOne("HRManagementSystem.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("HRManagementSystem.Models.LeaveRequest", b =>
                 {
                     b.HasOne("HRManagementSystem.Models.Employee", "ApprovedBy")
@@ -940,7 +949,7 @@ namespace HRManagementSystem.Migrations
                         .HasForeignKey("ApprovedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("HRManagementSystem.Models.User", "CreatedBy")
+                    b.HasOne("HRManagementSystem.Models.Identity.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1015,7 +1024,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("HRManagementSystem.Models.Salary", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.User", "CreatedBy")
+                    b.HasOne("HRManagementSystem.Models.Identity.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1038,7 +1047,7 @@ namespace HRManagementSystem.Migrations
                         .HasForeignKey("AssignedToId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("HRManagementSystem.Models.User", "CreatedBy")
+                    b.HasOne("HRManagementSystem.Models.Identity.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1060,7 +1069,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.User", null)
+                    b.HasOne("HRManagementSystem.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1069,7 +1078,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.User", null)
+                    b.HasOne("HRManagementSystem.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1084,7 +1093,7 @@ namespace HRManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HRManagementSystem.Models.User", null)
+                    b.HasOne("HRManagementSystem.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1093,7 +1102,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.User", null)
+                    b.HasOne("HRManagementSystem.Models.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

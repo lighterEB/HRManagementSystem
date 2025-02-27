@@ -1,7 +1,5 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:HRManagementSystem.ViewModels"
              xmlns:icons="using:Material.Icons.Avalonia"
              x:Class="HRManagementSystem.Views.HomeView"
@@ -9,7 +7,7 @@
 
     <Grid RowDefinitions="Auto,*">
         <!-- 顶部导航栏 -->
-        <Border Grid.Row="0" 
+        <Border Grid.Row="0"
                 Background="{DynamicResource MaterialPrimaryMidBrush}"
                 Height="64">
             <Grid ColumnDefinitions="Auto,*,Auto">
@@ -20,7 +18,7 @@
                            FontSize="20"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
-                           Margin="16,0"/>
+                           Margin="16,0" />
 
                 <!-- 右侧用户信息和登出按钮 -->
                 <StackPanel Grid.Column="2"
@@ -31,23 +29,23 @@
                                 Spacing="8"
                                 VerticalAlignment="Center">
                         <icons:MaterialIcon Kind="AccountCircle"
-                                          Width="24"
-                                          Height="24"
-                                          Foreground="{DynamicResource MaterialPrimaryMidForegroundBrush}" />
+                                            Width="24"
+                                            Height="24"
+                                            Foreground="{DynamicResource MaterialPrimaryMidForegroundBrush}" />
                         <TextBlock Text="{Binding UserName}"
                                    Foreground="{DynamicResource MaterialPrimaryMidForegroundBrush}"
                                    VerticalAlignment="Center" />
                     </StackPanel>
-                    
+
                     <Button Padding="8,4"
                             CornerRadius="4"
                             Background="Transparent"
                             Command="{Binding LogoutCommand}"
                             ToolTip.Tip="退出登录">
                         <icons:MaterialIcon Kind="Logout"
-                                          Width="20"
-                                          Height="20"
-                                          Foreground="{DynamicResource MaterialPrimaryMidForegroundBrush}" />
+                                            Width="20"
+                                            Height="20"
+                                            Foreground="{DynamicResource MaterialPrimaryMidForegroundBrush}" />
                     </Button>
                 </StackPanel>
             </Grid>
@@ -56,7 +54,7 @@
         <!-- 主内容区 -->
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
             <!-- 左侧导航菜单 -->
-            <Border Grid.Column="0" 
+            <Border Grid.Column="0"
                     Background="White"
                     Width="220"
                     BoxShadow="2 0 10 0 #15000000">
@@ -66,13 +64,13 @@
                          Padding="0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" 
-                                        Spacing="12" 
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="12"
                                         Margin="16,12">
-                                <icons:MaterialIcon Kind="{Binding Icon}" 
-                                                  Width="24" 
-                                                  Height="24" />
-                                <TextBlock Text="{Binding Title}" 
+                                <icons:MaterialIcon Kind="{Binding Icon}"
+                                                    Width="24"
+                                                    Height="24" />
+                                <TextBlock Text="{Binding Title}"
                                            VerticalAlignment="Center" />
                             </StackPanel>
                         </DataTemplate>
@@ -81,7 +79,7 @@
             </Border>
 
             <!-- 右侧内容区 -->
-            <ContentControl Grid.Column="1" 
+            <ContentControl Grid.Column="1"
                             Content="{Binding CurrentPage}"
                             Margin="16" />
         </Grid>

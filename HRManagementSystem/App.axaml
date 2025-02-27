@@ -1,6 +1,5 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="using:HRManagementSystem"
              xmlns:converters="using:HRManagementSystem.Converters"
              xmlns:vm="using:HRManagementSystem.ViewModels"
              xmlns:views="using:HRManagementSystem.Views"
@@ -9,9 +8,9 @@
              RequestedThemeVariant="Light">
 
     <Application.Resources>
-        <converters:BoolToStrikethroughConverter x:Key="BoolToStrikethroughConverter"/>
+        <converters:BoolToStrikethroughConverter x:Key="BoolToStrikethroughConverter" />
     </Application.Resources>
-  
+
     <Application.DataTemplates>
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <views:LoginView />
@@ -41,7 +40,7 @@
         <Style Selector="Button.action-card:pointerover">
             <Setter Property="Background" Value="#F5F5F5" />
         </Style>
-        
+
         <!-- 主要按钮样式 -->
         <Style Selector="Button.primary">
             <Setter Property="Background" Value="#6A1B9A" />

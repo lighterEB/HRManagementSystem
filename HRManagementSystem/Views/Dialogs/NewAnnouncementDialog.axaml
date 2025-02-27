@@ -14,36 +14,36 @@
                    Text="新建公告"
                    FontSize="20"
                    FontWeight="SemiBold"
-                   Margin="0,0,0,20"/>
-        
+                   Margin="0,0,0,20" />
+
         <StackPanel Grid.Row="1" Spacing="16">
             <TextBlock Text="公告标题"
-                       FontWeight="SemiBold"/>
+                       FontWeight="SemiBold" />
             <TextBox x:Name="TitleTextBox"
                      Watermark="请输入公告标题"
-                     Text="{Binding Title}"/>
-            
+                     Text="{Binding Title}" />
+
             <TextBlock Text="公告内容"
                        FontWeight="SemiBold"
-                       Margin="0,8,0,0"/>
+                       Margin="0,8,0,0" />
             <TextBox x:Name="ContentTextBox"
                      Watermark="请输入公告内容"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
                      Height="150"
-                     Text="{Binding Content}"/>
+                     Text="{Binding Content}" />
         </StackPanel>
-        
+
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Spacing="8"
                     Margin="0,20,0,0">
             <Button Content="取消"
-                    Click="CancelButton_Click"/>
+                    Click="CancelButton_Click" />
             <Button Content="确定"
                     Click="OkButton_Click"
-                    Classes="accent"/>
+                    Classes="accent" />
         </StackPanel>
     </Grid>
 </Window>

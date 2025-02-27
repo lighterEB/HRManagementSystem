@@ -4,57 +4,56 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using HRManagementSystem.ViewModels;
 
-namespace HRManagementSystem.Views.Dialogs
+namespace HRManagementSystem.Views.Dialogs;
+
+public partial class NewAnnouncementDialog : Window
 {
-    public partial class NewAnnouncementDialog : Window
+    private readonly NewAnnouncementViewModel _viewModel;
+
+    public NewAnnouncementDialog()
     {
-        private readonly NewAnnouncementViewModel _viewModel;
+        InitializeComponent();
+        _viewModel = new NewAnnouncementViewModel();
+        DataContext = _viewModel;
+    }
 
-        public NewAnnouncementDialog()
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
+    private void CancelButton_Click(object sender, RoutedEventArgs e)
+    {
+        Close(null);
+    }
+
+    private void OkButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(_viewModel.Title))
         {
-            InitializeComponent();
-            _viewModel = new NewAnnouncementViewModel();
-            DataContext = _viewModel;
+            ShowError("标题不能为空");
+            return;
         }
 
-        private void InitializeComponent()
+        if (string.IsNullOrWhiteSpace(_viewModel.Content))
         {
-            AvaloniaXamlLoader.Load(this);
+            ShowError("内容不能为空");
+            return;
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        var announcement = new AnnouncementItem
         {
-            Close(null);
-        }
+            Title = _viewModel.Title.Trim(),
+            Content = _viewModel.Content.Trim(),
+            Date = DateTime.Now
+        };
 
-        private void OkButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_viewModel.Title))
-            {
-                ShowError("标题不能为空");
-                return;
-            }
+        Close(announcement);
+    }
 
-            if (string.IsNullOrWhiteSpace(_viewModel.Content))
-            {
-                ShowError("内容不能为空");
-                return;
-            }
-
-            var announcement = new AnnouncementItem
-            {
-                Title = _viewModel.Title.Trim(),
-                Content = _viewModel.Content.Trim(),
-                Date = DateTime.Now
-            };
-
-            Close(announcement);
-        }
-
-        private async void ShowError(string message)
-        {
-            var dialog = new ErrorDialog("输入错误", message);
-            await dialog.ShowDialog(this);
-        }
+    private async void ShowError(string message)
+    {
+        var dialog = new ErrorDialog("输入错误", message);
+        await dialog.ShowDialog(this);
     }
 }

@@ -1,16 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace HRManagementSystem.Data
-{
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-    {
-        public AppDbContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlite("Data Source=HRManagement.db");
+namespace HRManagementSystem.Data;
 
-            return new AppDbContext(optionsBuilder.Options);
-        }
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+{
+    public AppDbContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseSqlite("Data Source=HRManagement.db");
+
+        return new AppDbContext(optionsBuilder.Options);
     }
 }

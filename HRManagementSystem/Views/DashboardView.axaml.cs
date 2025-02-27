@@ -1,18 +1,17 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace HRManagementSystem.Views
-{
-    public partial class DashboardView : UserControl
-    {
-        public DashboardView()
-        {
-            InitializeComponent();
-        }
+namespace HRManagementSystem.Views;
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+public partial class DashboardView : UserControl
+{
+    public DashboardView()
+    {
+        InitializeComponent();
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }
