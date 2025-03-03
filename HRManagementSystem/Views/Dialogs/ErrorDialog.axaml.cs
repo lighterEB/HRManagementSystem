@@ -1,29 +1,48 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 
-namespace HRManagementSystem.Views.Dialogs;
-
-public partial class ErrorDialog : Window
+namespace HRManagementSystem.Views.Dialogs
 {
-    public ErrorDialog(string title, string message)
+    public partial class ErrorDialog : Window
     {
-        InitializeComponent();
+        public ErrorDialog()
+        {
+            InitializeComponent();
+        }
 
-        var errorTitle = this.FindControl<TextBlock>("ErrorTitle");
-        var errorMessage = this.FindControl<TextBlock>("ErrorMessage");
+        public ErrorDialog(string title, string message) : this()
+        {
+            this.Title = title;
+            
+            // 安全地设置控件文本
+            var titleBlock = this.FindControl<TextBlock>("ErrorTitle");
+            var messageBlock = this.FindControl<TextBlock>("ErrorMessage");
+            
+            if (titleBlock != null) 
+                titleBlock.Text = title;
+            
+            if (messageBlock != null)
+                messageBlock.Text = message;
+        }
 
-        if (errorTitle != null) errorTitle.Text = title;
-        if (errorMessage != null) errorMessage.Text = message;
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
-
-    private void OkButton_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        
+        // 公开Close方法
+        public new void Close()
+        {
+            if (Dispatcher.UIThread.CheckAccess())
+            {
+                base.Close();
+            }
+            else
+            {
+                Dispatcher.UIThread.Post(base.Close);
+            }
+        }
     }
 }

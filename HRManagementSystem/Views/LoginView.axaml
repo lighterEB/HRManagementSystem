@@ -98,14 +98,6 @@
                                  PasswordChar="●"
                                  Watermark="密码" />
                     </Grid>
-
-                    <!-- 错误消息 -->
-                    <TextBlock Text="{Binding ErrorMessage}"
-                               Foreground="#D32F2F"
-                               TextWrapping="Wrap"
-                               IsVisible="{Binding ErrorMessage, 
-                                         Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-
                     <!-- 登录按钮 -->
                     <Button Content="登 录"
                             Command="{Binding LoginCommand}"

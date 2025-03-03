@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -12,6 +13,7 @@ using HRManagementSystem.Views;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 
 namespace HRManagementSystem;
 
@@ -27,6 +29,26 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
+        
+        // 添加全局异常处理
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        {
+            var exception = args.ExceptionObject as Exception;
+            Console.WriteLine($"未处理的全局异常: {exception}");
+        };
+
+        // ReactiveUI 全局异常处理
+        RxApp.DefaultExceptionHandler = Observer.Create<Exception>(ex =>
+        {
+            Console.WriteLine($"ReactiveUI未处理异常: {ex}");
+        });
+
+        // 处理未观察的任务异常
+        TaskScheduler.UnobservedTaskException += (sender, args) =>
+        {
+            Console.WriteLine($"未观察的任务异常: {args.Exception}");
+            args.SetObserved(); // 标记为已观察，防止程序崩溃
+        };
 
         // 数据库上下文
         services.AddDbContext<AppDbContext>(options =>
