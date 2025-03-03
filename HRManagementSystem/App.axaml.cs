@@ -29,7 +29,7 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
-        
+
         // 添加全局异常处理
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
