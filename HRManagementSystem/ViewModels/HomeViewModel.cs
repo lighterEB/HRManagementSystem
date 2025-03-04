@@ -2,7 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using HRManagementSystem.Commands;
 using HRManagementSystem.Views;
@@ -90,6 +92,10 @@ public class HomeViewModel : ViewModelBase
             {
                 // 创建并显示新的登录窗口
                 var loginWindow = new LoginWindow();
+                if (Application.Current is App app && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                {
+                    desktop.MainWindow = loginWindow;
+                }
                 loginWindow.Show();
 
                 // 关闭当前主窗口
