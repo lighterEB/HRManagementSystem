@@ -3,7 +3,7 @@
         xmlns:vm="using:HRManagementSystem.ViewModels"
         xmlns:views="using:HRManagementSystem.Views"
         x:Class="HRManagementSystem.Views.LoginWindow"
-        x:DataType="vm:LoginViewModel"
+        x:DataType="vm:LoginWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="人力资源管理系统"
         WindowStartupLocation="CenterScreen"
@@ -13,6 +13,6 @@
         Background="#F3E5F5">
 
     <Panel>
-        <views:LoginView />
+        <ContentControl Content="{Binding CurrentView}" />
     </Panel>
 </Window>

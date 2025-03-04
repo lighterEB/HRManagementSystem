@@ -2,8 +2,10 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
+using HRManagementSystem.Commands;
 using HRManagementSystem.Views.Dialogs;
 using ReactiveUI;
 
@@ -12,6 +14,8 @@ namespace HRManagementSystem.ViewModels;
 public class LoginViewModel : ViewModelBase
 {
     private readonly SimpleCommand _loginCommand;
+    private readonly SimpleCommand _navigateToRegisterCommand;
+    private readonly SimpleCommand _forgotPasswordCommand;
     private string _errorMessage = string.Empty;
     private bool _isLoading;
     private string _password = string.Empty;
@@ -25,6 +29,16 @@ public class LoginViewModel : ViewModelBase
             _ => !string.IsNullOrWhiteSpace(Username) &&
                  !string.IsNullOrWhiteSpace(Password) &&
                  !IsLoading
+        );
+        
+        // 添加导航到注册页面的命令
+        _navigateToRegisterCommand = new SimpleCommand(
+            _ => Dispatcher.UIThread.Post(() => OnNavigateToRegister())
+        );
+        
+        // 添加忘记密码命令
+        _forgotPasswordCommand = new SimpleCommand(
+            _ => Dispatcher.UIThread.Post(() => OnForgotPassword())
         );
     }
 
@@ -65,8 +79,11 @@ public class LoginViewModel : ViewModelBase
     }
 
     public ICommand LoginCommand => _loginCommand;
+    public ICommand NavigateToRegisterCommand => _navigateToRegisterCommand;
+    public ICommand ForgotPasswordCommand => _forgotPasswordCommand;
 
     public event EventHandler? LoginSuccessful;
+    public event EventHandler? NavigateToRegister;
 
     // 使用异步方法，避免阻塞UI线程
     private async Task LoginActionAsync()
@@ -95,6 +112,21 @@ public class LoginViewModel : ViewModelBase
             // 无论结果如何，关闭加载状态
             IsLoading = false;
         }
+    }
+    
+    // 导航到注册页面的处理方法
+    public void OnNavigateToRegister()
+    {
+        NavigateToRegister?.Invoke(this, EventArgs.Empty);
+    }
+    
+    // 忘记密码的处理方法
+    public void OnForgotPassword()
+    {
+        Dispatcher.UIThread.Post(async () => 
+        {
+            await ShowInfoDialogAsync("提示", "密码重置功能正在开发中...");
+        });
     }
 
     // 改进后的异步错误对话框
@@ -127,35 +159,34 @@ public class LoginViewModel : ViewModelBase
             Console.WriteLine($"显示错误对话框失败: {dialogEx}");
         }
     }
-}
-
-// Avalonia 兼容的简单Command实现
-public class SimpleCommand : ICommand
-{
-    private readonly Func<object?, bool> _canExecute;
-    private readonly Action<object?> _execute;
-
-    public SimpleCommand(Action<object?> execute, Func<object?, bool>? canExecute = null)
+    
+    // 显示信息对话框
+    private async Task ShowInfoDialogAsync(string title, string message)
     {
-        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-        _canExecute = canExecute ?? (_ => true);
-    }
-
-    public event EventHandler? CanExecuteChanged;
-
-    public bool CanExecute(object? parameter)
-    {
-        return _canExecute(parameter);
-    }
-
-    public void Execute(object? parameter)
-    {
-        _execute(parameter);
-    }
-
-    // 手动触发CanExecuteChanged事件
-    public void RaiseCanExecuteChanged()
-    {
-        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        try
+        {
+            // 同样使用Post方法避免歧义
+            Dispatcher.UIThread.Post(async () =>
+            {
+                var dialog = new InfoDialog(title, message);
+                
+                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                {
+                    var parentWindow = desktop.MainWindow;
+                    if (parentWindow != null)
+                        await dialog.ShowDialog(parentWindow);
+                    else
+                        dialog.Show();
+                }
+                else
+                {
+                    dialog.Show();
+                }
+            });
+        }
+        catch (Exception dialogEx)
+        {
+            Console.WriteLine($"显示信息对话框失败: {dialogEx}");
+        }
     }
 }

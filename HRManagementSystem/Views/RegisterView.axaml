@@ -1,9 +1,9 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:HRManagementSystem.ViewModels"
              xmlns:icons="using:Material.Icons.Avalonia"
-             x:Class="HRManagementSystem.Views.LoginView"
-             x:DataType="vm:LoginViewModel"
+             x:Class="HRManagementSystem.Views.RegisterView"
+             x:DataType="vm:RegisterViewModel"
              Background="#F3E5F5">  <!-- 浅紫色背景 -->
 
     <UserControl.Styles>
@@ -23,15 +23,14 @@
             <Setter Property="Margin" Value="0,16" />
             <Setter Property="Padding" Value="16,8" />
             <Setter Property="Width" Value="100" />  <!-- 设置宽度为100 -->
-            <Setter Property="HorizontalAlignment" Value="Center" />  <!-- 设置水平居中 -->
-            <Setter Property="HorizontalContentAlignment" Value="Center" />  <!-- 内容居中 -->
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
 
         <Style Selector="Button.primary:pointerover">
             <Setter Property="Background" Value="#4A148C" />  <!-- 更深的紫色 -->
         </Style>
         
-        <!-- 链接文本样式 -->
         <Style Selector="TextBlock.link">
             <Setter Property="Foreground" Value="#6A1B9A" />
             <Setter Property="Cursor" Value="Hand" />
@@ -69,20 +68,20 @@
                                  Fill="#CE93D8" />
 
                         <!-- 主图标 -->
-                        <icons:MaterialIcon Kind="AccountGroup"
+                        <icons:MaterialIcon Kind="AccountPlus"
                                             Width="48"
                                             Height="48"
                                             Foreground="#6A1B9A" />
                     </Grid>
 
-                    <TextBlock Text="用户登录"
+                    <TextBlock Text="用户注册"
                                HorizontalAlignment="Center"
                                FontSize="20"
                                FontWeight="Medium"
                                Foreground="#6A1B9A" />
                 </StackPanel>
 
-                <!-- 登录表单 -->
+                <!-- 注册表单 -->
                 <StackPanel Grid.Row="1"
                             Spacing="16">
 
@@ -113,17 +112,41 @@
                                  Watermark="密码" />
                     </Grid>
                     
-                    <!-- 登录按钮 -->
-                    <Button Content="登 录"
-                            Command="{Binding LoginCommand}"
+                    <!-- 确认密码输入框 -->
+                    <Grid>
+                        <icons:MaterialIcon Kind="LockCheck"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="8,0"
+                                            Foreground="#9575CD"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
+                        <TextBox Text="{Binding ConfirmPassword}"
+                                 PasswordChar="●"
+                                 Watermark="确认密码" />
+                    </Grid>
+                    
+                    <!-- 邮箱输入框 -->
+                    <Grid>
+                        <icons:MaterialIcon Kind="Email"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="8,0"
+                                            Foreground="#9575CD"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
+                        <TextBox Text="{Binding Email}"
+                                 Watermark="电子邮箱" />
+                    </Grid>
+                    
+                    <!-- 注册按钮 -->
+                    <Button Content="注 册"
+                            Command="{Binding RegisterCommand}"
                             Classes="primary">
                         <Button.IsEnabled>
                             <MultiBinding Converter="{x:Static BoolConverters.And}">
                                 <Binding Path="!IsLoading" />
-                                <Binding Path="Username"
-                                         Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
-                                <Binding Path="Password"
-                                         Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                                <Binding Path="IsFormValid" />
                             </MultiBinding>
                         </Button.IsEnabled>
                     </Button>
@@ -136,18 +159,12 @@
                                  Foreground="#6A1B9A"
                                  Margin="0,8" />
                                  
-                    <!-- 添加底部链接 -->
-                    <StackPanel Orientation="Horizontal" 
-                                HorizontalAlignment="Center" 
-                                Spacing="20" 
-                                Margin="0,8,0,0">
-                        <TextBlock Classes="link" 
-                                   Text="还没账号？立即注册" 
-                                   x:Name="RegisterLink" />
-                        <TextBlock Classes="link" 
-                                   Text="忘记密码" 
-                                   x:Name="ForgotPasswordLink" />
-                    </StackPanel>
+                    <!-- 返回登录链接 -->
+                    <TextBlock Classes="link" 
+                               Text="已有账号？返回登录" 
+                               x:Name="BackToLoginLink"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0" />
                 </StackPanel>
 
                 <!-- 底部信息 -->
