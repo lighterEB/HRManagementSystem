@@ -7,8 +7,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using HRManagementSystem.Commands;
+using HRManagementSystem.Models.Identity;
 using HRManagementSystem.Views;
 using HRManagementSystem.Views.Dialogs;
+using Microsoft.AspNetCore.Identity;
 using ReactiveUI;
 
 namespace HRManagementSystem.ViewModels;
@@ -22,14 +24,19 @@ public class HomeViewModel : ViewModelBase
     private ObservableCollection<MenuItem> _menuItems;
     private int _selectedIndex;
     private string _userName;
+    private readonly CustomSignInManager _signInManager;
+    private readonly UserManager<User> _userManager;
 
-    public HomeViewModel(Window mainWindow, MainWindowViewModel mainWindowViewModel)
+
+    public HomeViewModel(Window mainWindow, MainWindowViewModel mainWindowViewModel, CustomSignInManager signInManager, UserManager<User> userManager)
     {
         _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
         _mainWindowViewModel = mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
         _userName = "管理员";
         _selectedIndex = 0;
         _currentPage = new DashboardViewModel(_mainWindow);
+        _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+        _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
 
         // 直接使用 DelegateCommand
         LogoutCommand = new DelegateCommand(OnLogout);
@@ -91,7 +98,7 @@ public class HomeViewModel : ViewModelBase
             if (result)
             {
                 // 创建并显示新的登录窗口
-                var loginWindow = new LoginWindow();
+                var loginWindow = new LoginWindow(_signInManager, _userManager);
                 if (Application.Current is App app && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 {
                     desktop.MainWindow = loginWindow;

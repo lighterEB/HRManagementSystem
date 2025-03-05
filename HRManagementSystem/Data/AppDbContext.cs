@@ -15,9 +15,6 @@ public class AppDbContext : IdentityDbContext<User, ApplicationRole, string>
     {
     }
 
-    // 基于Identity框架的表
-    // User和Role表由基类自动创建
-
     // 权限相关表
     public DbSet<Permission> Permissions { get; set; } = null!;
     public DbSet<RolePermission> RolePermissions { get; set; } = null!;

@@ -1,19 +1,21 @@
 using System;
 using Avalonia.Controls;
 using HRManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using HRManagementSystem.Models.Identity;
 
 namespace HRManagementSystem.Views;
 
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(CustomSignInManager signInManager, UserManager<User> userManager)
     {
         InitializeComponent();
 
         // 确保窗口可以调整大小
         CanResize = true;
 
-        var viewModel = new MainWindowViewModel();
+        var viewModel = new MainWindowViewModel(signInManager, userManager);
         DataContext = viewModel;
         viewModel.SetWindow(this);
     }

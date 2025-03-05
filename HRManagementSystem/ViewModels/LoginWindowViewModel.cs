@@ -1,6 +1,8 @@
 ﻿using System;
 using Avalonia.Controls;
+using HRManagementSystem.Models.Identity;
 using HRManagementSystem.Views;
+using Microsoft.AspNetCore.Identity;
 using ReactiveUI;
 
 namespace HRManagementSystem.ViewModels;
@@ -12,12 +14,17 @@ public class LoginWindowViewModel : ViewModelBase
     private readonly RegisterViewModel _registerViewModel;
     private readonly Window _window;
 
-    public LoginWindowViewModel(Window window)
+    private readonly CustomSignInManager _signInManager;
+    private readonly UserManager<User> _userManager;
+
+    public LoginWindowViewModel(Window window, CustomSignInManager signInManager, UserManager<User> userManager)
     {
         _window = window ?? throw new ArgumentNullException(nameof(window));
+        _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+        _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         
         // 创建视图模型
-        _loginViewModel = new LoginViewModel();
+        _loginViewModel = new LoginViewModel(_signInManager, _userManager);
         _registerViewModel = new RegisterViewModel();
         
         // 设置初始视图
@@ -59,7 +66,7 @@ public class LoginWindowViewModel : ViewModelBase
     private void OnLoginSuccessful(object? sender, EventArgs e)
     {
         // 创建并显示主窗口
-        var mainWindow = new MainWindow();
+        var mainWindow = new MainWindow(_signInManager, _userManager);
         mainWindow.Show();
 
         // 关闭登录窗口

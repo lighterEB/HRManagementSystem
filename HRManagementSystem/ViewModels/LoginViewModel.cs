@@ -6,7 +6,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using HRManagementSystem.Commands;
+using HRManagementSystem.Models.Identity;
 using HRManagementSystem.Views.Dialogs;
+using Microsoft.AspNetCore.Identity;
 using ReactiveUI;
 
 namespace HRManagementSystem.ViewModels;
@@ -20,10 +22,14 @@ public class LoginViewModel : ViewModelBase
     private bool _isLoading;
     private string _password = string.Empty;
     private string _username = string.Empty;
+    private readonly CustomSignInManager _signInManager;
+    private readonly UserManager<User> _userManager;
 
-    public LoginViewModel()
+    public LoginViewModel(CustomSignInManager signInManager, UserManager<User> userManager)
     {
-        // 使用简单的Command实现，而非ReactiveCommand
+        _signInManager = signInManager;
+        _userManager = userManager;
+
         _loginCommand = new SimpleCommand(
             _ => Dispatcher.UIThread.Post(async () => await LoginActionAsync()),
             _ => !string.IsNullOrWhiteSpace(Username) &&
@@ -85,23 +91,32 @@ public class LoginViewModel : ViewModelBase
     public event EventHandler? LoginSuccessful;
     public event EventHandler? NavigateToRegister;
 
-    // 使用异步方法，避免阻塞UI线程
     private async Task LoginActionAsync()
     {
         try
         {
-            // 设置加载中状态
             IsLoading = true;
 
-            // 模拟网络延迟 - 使用异步等待
-            await Task.Delay(1000);
+            var result = await _signInManager.PasswordSignInAsync(Username, Password, isPersistent: false, lockoutOnFailure: false);
 
-            if (Username == "admin" && Password == "admin")
-                // 用户验证成功
-                LoginSuccessful?.Invoke(this, EventArgs.Empty);
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(Username);
+                if (user != null && user.IsActive)
+                {
+                    user.LastLoginTime = DateTime.UtcNow;
+                    await _userManager.UpdateAsync(user);
+                    LoginSuccessful?.Invoke(this, EventArgs.Empty);
+                }
+                else
+                {
+                    await ShowErrorDialogAsync("登录失败", "账户已被禁用，请联系管理员");
+                }
+            }
             else
-                // 用户验证失败
+            {
                 await ShowErrorDialogAsync("登录失败", "用户名或密码错误，请重试");
+            }
         }
         catch (Exception ex)
         {
@@ -109,84 +124,59 @@ public class LoginViewModel : ViewModelBase
         }
         finally
         {
-            // 无论结果如何，关闭加载状态
             IsLoading = false;
         }
     }
-    
-    // 导航到注册页面的处理方法
+
     public void OnNavigateToRegister()
     {
         NavigateToRegister?.Invoke(this, EventArgs.Empty);
     }
-    
-    // 忘记密码的处理方法
+
     public void OnForgotPassword()
     {
-        Dispatcher.UIThread.Post(async () => 
-        {
-            await ShowInfoDialogAsync("提示", "密码重置功能正在开发中...");
-        });
+        _ = ShowInfoDialogAsync("提示", "密码重置功能正在开发中...");
     }
 
-    // 改进后的异步错误对话框
-    private async Task ShowErrorDialogAsync(string title, string message)
+    private async Task ShowDialogAsync(string title, string message, Type dialogType)
     {
         try
         {
-            // 使用异步方式在UI线程上显示对话框
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                var dialog = new ErrorDialog(title, message);
+                var dialog = Activator.CreateInstance(dialogType, title, message) as Window;
 
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 {
                     var parentWindow = desktop.MainWindow;
                     if (parentWindow != null)
-                        // 使用异步方式显示对话框
-                        await dialog.ShowDialog(parentWindow);
+                    {
+                        await (dialog ?? throw new InvalidOperationException("Dialog is null")).ShowDialog(parentWindow);
+                    }
                     else
-                        dialog.Show();
+                    {
+                        (dialog ?? throw new InvalidOperationException("Dialog is null")).Show();
+                    }
                 }
                 else
                 {
-                    dialog.Show();
+                    dialog?.Show();
                 }
             });
         }
         catch (Exception dialogEx)
         {
-            Console.WriteLine($"显示错误对话框失败: {dialogEx}");
+            Console.WriteLine($"显示对话框失败: {dialogEx}");
         }
     }
-    
-    // 显示信息对话框
+
+    private async Task ShowErrorDialogAsync(string title, string message)
+    {
+        await ShowDialogAsync(title, message, typeof(ErrorDialog));
+    }
+
     private async Task ShowInfoDialogAsync(string title, string message)
     {
-        try
-        {
-            // 同样使用Post方法避免歧义
-            Dispatcher.UIThread.Post(async () =>
-            {
-                var dialog = new InfoDialog(title, message);
-                
-                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                {
-                    var parentWindow = desktop.MainWindow;
-                    if (parentWindow != null)
-                        await dialog.ShowDialog(parentWindow);
-                    else
-                        dialog.Show();
-                }
-                else
-                {
-                    dialog.Show();
-                }
-            });
-        }
-        catch (Exception dialogEx)
-        {
-            Console.WriteLine($"显示信息对话框失败: {dialogEx}");
-        }
+        await ShowDialogAsync(title, message, typeof(InfoDialog));
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using HRManagementSystem.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using ReactiveUI;
 
 namespace HRManagementSystem.ViewModels;
@@ -12,9 +14,14 @@ public class MainWindowViewModel : ViewModelBase
     private Window? _window;
     private double _windowHeight;
     private double _windowWidth;
+    private readonly CustomSignInManager _signInManager;
+    private readonly UserManager<User> _userManager;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(CustomSignInManager signInManager, UserManager<User> userManager)
     {
+        _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+        _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+
         // 初始化为临时的空视图模型
         _currentViewModel = new ViewModelBase();
 
@@ -24,7 +31,7 @@ public class MainWindowViewModel : ViewModelBase
         CanResize = false;
 
         // 创建登录视图模型
-        var loginViewModel = new LoginViewModel();
+        var loginViewModel = new LoginViewModel(_signInManager, _userManager);
         loginViewModel.LoginSuccessful += OnLoginSuccessful;
         CurrentViewModel = loginViewModel;
     }
@@ -69,7 +76,7 @@ public class MainWindowViewModel : ViewModelBase
         });
 
         // 设置窗口后创建 HomeViewModel
-        CurrentViewModel = new HomeViewModel(_window, this);
+        CurrentViewModel = new HomeViewModel(_window, this, _signInManager, _userManager);
     }
 
     private void OnLoginSuccessful(object? sender, EventArgs e)
@@ -87,6 +94,6 @@ public class MainWindowViewModel : ViewModelBase
                 _window.CanResize = true; // 直接设置为 true
             });
 
-        CurrentViewModel = new HomeViewModel(_window!, this);
+        CurrentViewModel = new HomeViewModel(_window!, this, _signInManager, _userManager);
     }
 }
