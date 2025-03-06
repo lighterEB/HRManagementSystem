@@ -59,7 +59,7 @@ public class LoginWindowViewModel : ViewModelBase
         else if (_currentView is LoginViewModel)
         {
             // 登录页面使用原始高度
-            _window.Height = 580;
+            _window.Height = 520;
         }
     }
 

@@ -2,10 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:HRManagementSystem.ViewModels"
              xmlns:icons="using:Material.Icons.Avalonia"
+             xmlns:internal="clr-namespace:Microsoft.EntityFrameworkCore.Metadata.Internal;assembly=Microsoft.EntityFrameworkCore"
              x:Class="HRManagementSystem.Views.LoginView"
              x:DataType="vm:LoginViewModel"
              Background="#F3E5F5">  <!-- 浅紫色背景 -->
-
+    
+    
+    
     <UserControl.Styles>
         <Style Selector="TextBox">
             <Setter Property="Height" Value="40" />
@@ -15,7 +18,7 @@
             <Setter Property="Padding" Value="35,8,8,8" />
         </Style>
 
-        <Style Selector="Button.primary">
+        <Style Selector="Button.login">
             <Setter Property="Background" Value="#6A1B9A" />  <!-- 深紫色按钮 -->
             <Setter Property="Foreground" Value="White" />
             <Setter Property="CornerRadius" Value="4" />
@@ -25,12 +28,11 @@
             <Setter Property="Width" Value="100" />  <!-- 设置宽度为100 -->
             <Setter Property="HorizontalAlignment" Value="Center" />  <!-- 设置水平居中 -->
             <Setter Property="HorizontalContentAlignment" Value="Center" />  <!-- 内容居中 -->
+            <!-- 增加鼠标悬停样式 -->
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="#B39DDB"/>
+            </Style>
         </Style>
-
-        <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="#4A148C" />  <!-- 更深的紫色 -->
-        </Style>
-        
         <!-- 链接文本样式 -->
         <Style Selector="TextBlock.link">
             <Setter Property="Foreground" Value="#6A1B9A" />
@@ -96,7 +98,8 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center" />
                         <TextBox Text="{Binding Username}"
-                                 Watermark="用户名" />
+                                 Watermark="用户名"
+                                 Padding="35,8,8,8" />
                     </Grid>
 
                     <!-- 密码输入框 -->
@@ -110,13 +113,14 @@
                                             VerticalAlignment="Center" />
                         <TextBox Text="{Binding Password}"
                                  PasswordChar="●"
-                                 Watermark="密码" />
+                                 Watermark="密码"
+                                 Padding="35,8,8,8" />
                     </Grid>
                     
                     <!-- 登录按钮 -->
                     <Button Content="登 录"
                             Command="{Binding LoginCommand}"
-                            Classes="primary">
+                            Classes="login">
                         <Button.IsEnabled>
                             <MultiBinding Converter="{x:Static BoolConverters.And}">
                                 <Binding Path="!IsLoading" />
@@ -139,7 +143,7 @@
                     <!-- 添加底部链接 -->
                     <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Center" 
-                                Spacing="20" 
+                                Spacing="40"
                                 Margin="0,8,0,0">
                         <TextBlock Classes="link" 
                                    Text="还没账号？立即注册" 
