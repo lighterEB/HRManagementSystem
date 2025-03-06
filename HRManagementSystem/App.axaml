@@ -46,7 +46,7 @@
 
         <!-- 主要按钮样式 -->
         <Style Selector="Button.primary">
-            <Setter Property="Background" Value="#6A1B9A" />
+            <Setter Property="Background" Value="#B39DDB" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="CornerRadius" Value="4" />
             <Setter Property="Height" Value="40" />
@@ -57,8 +57,16 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
 
-        <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="#B39DDB" />
+        <!-- 悬停状态 -->
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6A1B9A" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <!-- 禁用状态 -->
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="LightGray" />
+            <Setter Property="Foreground" Value="#616161" />
         </Style>
     </Application.Styles>
 </Application>

@@ -15,22 +15,6 @@
             <Setter Property="Padding" Value="35,8,8,8" />
         </Style>
 
-        <Style Selector="Button.primary">
-            <Setter Property="Background" Value="#6A1B9A" />  <!-- 深紫色按钮 -->
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="CornerRadius" Value="4" />
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Margin" Value="0,16" />
-            <Setter Property="Padding" Value="16,8" />
-            <Setter Property="Width" Value="100" />  <!-- 设置宽度为100 -->
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-        </Style>
-
-        <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="#4A148C" />  <!-- 更深的紫色 -->
-        </Style>
-
         <Style Selector="TextBlock.link">
             <Setter Property="Foreground" Value="#6A1B9A" />
             <Setter Property="Cursor" Value="Hand" />

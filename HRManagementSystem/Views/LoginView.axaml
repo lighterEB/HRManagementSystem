@@ -18,14 +18,14 @@
 
         <!-- 链接文本样式 -->
         <Style Selector="TextBlock.link">
-            <Setter Property="Foreground" Value="#6A1B9A" />
+            <Setter Property="Foreground" Value="#B39DDB" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="TextDecorations" Value="Underline" />
+            <Style Selector="^:pointerover">
+                <Setter Property="Foreground" Value="#6A1B9A"></Setter>
+            </Style>
         </Style>
-
-        <Style Selector="TextBlock.link:pointerover">
-            <Setter Property="Foreground" Value="#4A148C" />
-        </Style>
+        
     </UserControl.Styles>
 
     <Grid>
