@@ -1,8 +1,8 @@
 using System;
 using Avalonia.Controls;
+using HRManagementSystem.Models.Identity;
 using HRManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using HRManagementSystem.Models.Identity;
 
 namespace HRManagementSystem.Views;
 

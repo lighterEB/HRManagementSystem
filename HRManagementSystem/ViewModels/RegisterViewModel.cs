@@ -13,11 +13,11 @@ namespace HRManagementSystem.ViewModels;
 public class RegisterViewModel : ViewModelBase
 {
     private readonly SimpleCommand _registerCommand;
-    private string _username = string.Empty;
-    private string _password = string.Empty;
     private string _confirmPassword = string.Empty;
     private string _email = string.Empty;
     private bool _isLoading;
+    private string _password = string.Empty;
+    private string _username = string.Empty;
 
     public RegisterViewModel()
     {
@@ -77,11 +77,11 @@ public class RegisterViewModel : ViewModelBase
         }
     }
 
-    public bool IsFormValid => 
-        !string.IsNullOrWhiteSpace(Username) && 
-        !string.IsNullOrWhiteSpace(Password) && 
-        !string.IsNullOrWhiteSpace(ConfirmPassword) && 
-        !string.IsNullOrWhiteSpace(Email) && 
+    public bool IsFormValid =>
+        !string.IsNullOrWhiteSpace(Username) &&
+        !string.IsNullOrWhiteSpace(Password) &&
+        !string.IsNullOrWhiteSpace(ConfirmPassword) &&
+        !string.IsNullOrWhiteSpace(Email) &&
         Password == ConfirmPassword;
 
     public ICommand RegisterCommand => _registerCommand;
@@ -105,17 +105,15 @@ public class RegisterViewModel : ViewModelBase
 
             // 在此处添加真实的注册逻辑
             // 例如：调用API或服务
-            
+
             // 注册成功
             var dialog = new InfoDialog("注册成功", "账号已创建，请登录");
             if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
                 await dialog.ShowDialog(desktop.MainWindow);
-            }
-            
+
             // 触发注册成功事件
             RegisterSuccessful?.Invoke(this, EventArgs.Empty);
-            
+
             // 触发返回登录事件
             BackToLogin?.Invoke(this, EventArgs.Empty);
         }
@@ -123,9 +121,7 @@ public class RegisterViewModel : ViewModelBase
         {
             var errorDialog = new ErrorDialog("注册失败", ex.Message);
             if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
                 await errorDialog.ShowDialog(desktop.MainWindow);
-            }
         }
         finally
         {

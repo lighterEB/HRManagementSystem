@@ -7,20 +7,6 @@
         CanResize="False"
         WindowStartupLocation="CenterOwner">
 
-    <Window.Styles>
-        <Style Selector="Button.primary">
-            <Setter Property="Background" Value="#6A1B9A" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Padding" Value="16,8" />
-            <Setter Property="CornerRadius" Value="4" />
-            <Setter Property="MinWidth" Value="80" />
-        </Style>
-
-        <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="#4A148C" />
-        </Style>
-    </Window.Styles>
-
     <StackPanel Margin="20" Spacing="20">
         <TextBlock x:Name="ErrorTitle"
                    FontSize="16"

@@ -30,13 +30,13 @@
         <Style Selector="Button.primary:pointerover">
             <Setter Property="Background" Value="#4A148C" />  <!-- 更深的紫色 -->
         </Style>
-        
+
         <Style Selector="TextBlock.link">
             <Setter Property="Foreground" Value="#6A1B9A" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="TextDecorations" Value="Underline" />
         </Style>
-        
+
         <Style Selector="TextBlock.link:pointerover">
             <Setter Property="Foreground" Value="#4A148C" />
         </Style>
@@ -111,7 +111,7 @@
                                  PasswordChar="●"
                                  Watermark="密码" />
                     </Grid>
-                    
+
                     <!-- 确认密码输入框 -->
                     <Grid>
                         <icons:MaterialIcon Kind="LockCheck"
@@ -125,7 +125,7 @@
                                  PasswordChar="●"
                                  Watermark="确认密码" />
                     </Grid>
-                    
+
                     <!-- 邮箱输入框 -->
                     <Grid>
                         <icons:MaterialIcon Kind="Email"
@@ -138,7 +138,7 @@
                         <TextBox Text="{Binding Email}"
                                  Watermark="电子邮箱" />
                     </Grid>
-                    
+
                     <!-- 注册按钮 -->
                     <Button Content="注 册"
                             Command="{Binding RegisterCommand}"
@@ -158,10 +158,10 @@
                                  Height="2"
                                  Foreground="#6A1B9A"
                                  Margin="0,8" />
-                                 
+
                     <!-- 返回登录链接 -->
-                    <TextBlock Classes="link" 
-                               Text="已有账号？返回登录" 
+                    <TextBlock Classes="link"
+                               Text="已有账号？返回登录"
                                x:Name="BackToLoginLink"
                                HorizontalAlignment="Center"
                                Margin="0,8,0,0" />

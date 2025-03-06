@@ -10,14 +10,14 @@ using HRManagementSystem.Models.Identity;
 using HRManagementSystem.Services.Implementations;
 using HRManagementSystem.Services.Interfaces;
 using HRManagementSystem.Views;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ReactiveUI;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
+using ReactiveUI;
 
 namespace HRManagementSystem;
 
@@ -77,7 +77,7 @@ public class App : Application
         // 服务注册
         services.AddScoped<IUserService, UserService>();
         services.AddDataProtection();
-        services.AddScoped<CustomSignInManager>(provider => 
+        services.AddScoped<CustomSignInManager>(provider =>
             new CustomSignInManager(
                 provider.GetRequiredService<UserManager<User>>(),
                 provider.GetRequiredService<IHttpContextAccessor>(),
@@ -90,10 +90,7 @@ public class App : Application
 
         // 构建服务提供者
         _serviceProvider = services.BuildServiceProvider();
-        if (_serviceProvider == null)
-        {
-            throw new InvalidOperationException("服务提供者构建失败");
-        }
+        if (_serviceProvider == null) throw new InvalidOperationException("服务提供者构建失败");
 
         Console.WriteLine("服务提供者已成功构建");
 
@@ -106,19 +103,22 @@ public class App : Application
         {
             // 检查服务是否正确注册
             Console.WriteLine("Checking service registration...");
-            Console.WriteLine("IHttpContextAccessor registered: " + (_serviceProvider.GetService<IHttpContextAccessor>() != null));
-            Console.WriteLine("UserClaimsPrincipalFactory registered: " + (_serviceProvider.GetService<IUserClaimsPrincipalFactory<User>>() != null));
-            Console.WriteLine("AuthenticationSchemeProvider registered: " + (_serviceProvider.GetService<IAuthenticationSchemeProvider>() != null));
-            Console.WriteLine("SignInManager<User> registered: " + (_serviceProvider.GetService<SignInManager<User>>() != null));
-            Console.WriteLine("UserManager<User> registered: " + (_serviceProvider.GetService<UserManager<User>>() != null));
+            Console.WriteLine("IHttpContextAccessor registered: " +
+                              (_serviceProvider.GetService<IHttpContextAccessor>() != null));
+            Console.WriteLine("UserClaimsPrincipalFactory registered: " +
+                              (_serviceProvider.GetService<IUserClaimsPrincipalFactory<User>>() != null));
+            Console.WriteLine("AuthenticationSchemeProvider registered: " +
+                              (_serviceProvider.GetService<IAuthenticationSchemeProvider>() != null));
+            Console.WriteLine("SignInManager<User> registered: " +
+                              (_serviceProvider.GetService<SignInManager<User>>() != null));
+            Console.WriteLine("UserManager<User> registered: " +
+                              (_serviceProvider.GetService<UserManager<User>>() != null));
 
             var signInManager = GetService<CustomSignInManager>();
             var userManager = GetService<UserManager<User>>();
 
             if (signInManager == null || userManager == null)
-            {
                 throw new InvalidOperationException("SignInManager 或 UserManager 未正确初始化");
-            }
 
             Console.WriteLine("正在创建主窗口...");
             desktop.MainWindow = new LoginWindow(signInManager, userManager);

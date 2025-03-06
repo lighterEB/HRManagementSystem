@@ -41,17 +41,24 @@
         </Style>
 
         <Style Selector="Button.action-card:pointerover">
-            <Setter Property="Background" Value="#F5F5F5" />
+            <Setter Property="Background" Value="#B39DDB" />
         </Style>
 
         <!-- 主要按钮样式 -->
         <Style Selector="Button.primary">
             <Setter Property="Background" Value="#6A1B9A" />
             <Setter Property="Foreground" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="0,16" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
 
         <Style Selector="Button.primary:pointerover">
-            <Setter Property="Background" Value="#8E24AA" />
+            <Setter Property="Background" Value="#B39DDB" />
         </Style>
     </Application.Styles>
 </Application>

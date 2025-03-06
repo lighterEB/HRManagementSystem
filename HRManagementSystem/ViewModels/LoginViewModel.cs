@@ -15,15 +15,15 @@ namespace HRManagementSystem.ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
+    private readonly SimpleCommand _forgotPasswordCommand;
     private readonly SimpleCommand _loginCommand;
     private readonly SimpleCommand _navigateToRegisterCommand;
-    private readonly SimpleCommand _forgotPasswordCommand;
+    private readonly CustomSignInManager _signInManager;
+    private readonly UserManager<User> _userManager;
     private string _errorMessage = string.Empty;
     private bool _isLoading;
     private string _password = string.Empty;
     private string _username = string.Empty;
-    private readonly CustomSignInManager _signInManager;
-    private readonly UserManager<User> _userManager;
 
     public LoginViewModel(CustomSignInManager signInManager, UserManager<User> userManager)
     {
@@ -36,12 +36,12 @@ public class LoginViewModel : ViewModelBase
                  !string.IsNullOrWhiteSpace(Password) &&
                  !IsLoading
         );
-        
+
         // 添加导航到注册页面的命令
         _navigateToRegisterCommand = new SimpleCommand(
             _ => Dispatcher.UIThread.Post(() => OnNavigateToRegister())
         );
-        
+
         // 添加忘记密码命令
         _forgotPasswordCommand = new SimpleCommand(
             _ => Dispatcher.UIThread.Post(() => OnForgotPassword())
@@ -97,7 +97,7 @@ public class LoginViewModel : ViewModelBase
         {
             IsLoading = true;
 
-            var result = await _signInManager.PasswordSignInAsync(Username, Password, isPersistent: false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(Username, Password, false, false);
 
             if (result.Succeeded)
             {
@@ -150,13 +150,10 @@ public class LoginViewModel : ViewModelBase
                 {
                     var parentWindow = desktop.MainWindow;
                     if (parentWindow != null)
-                    {
-                        await (dialog ?? throw new InvalidOperationException("Dialog is null")).ShowDialog(parentWindow);
-                    }
+                        await (dialog ?? throw new InvalidOperationException("Dialog is null"))
+                            .ShowDialog(parentWindow);
                     else
-                    {
                         (dialog ?? throw new InvalidOperationException("Dialog is null")).Show();
-                    }
                 }
                 else
                 {

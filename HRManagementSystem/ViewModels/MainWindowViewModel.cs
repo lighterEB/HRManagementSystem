@@ -9,13 +9,13 @@ namespace HRManagementSystem.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    private readonly CustomSignInManager _signInManager;
+    private readonly UserManager<User> _userManager;
     private bool _canResize;
     private ViewModelBase _currentViewModel;
     private Window? _window;
     private double _windowHeight;
     private double _windowWidth;
-    private readonly CustomSignInManager _signInManager;
-    private readonly UserManager<User> _userManager;
 
     public MainWindowViewModel(CustomSignInManager signInManager, UserManager<User> userManager)
     {

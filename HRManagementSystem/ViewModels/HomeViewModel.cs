@@ -19,16 +19,17 @@ public class HomeViewModel : ViewModelBase
 {
     private readonly Window _mainWindow;
     private readonly MainWindowViewModel _mainWindowViewModel;
+    private readonly CustomSignInManager _signInManager;
+    private readonly UserManager<User> _userManager;
     private ViewModelBase _currentPage;
 
     private ObservableCollection<MenuItem> _menuItems;
     private int _selectedIndex;
     private string _userName;
-    private readonly CustomSignInManager _signInManager;
-    private readonly UserManager<User> _userManager;
 
 
-    public HomeViewModel(Window mainWindow, MainWindowViewModel mainWindowViewModel, CustomSignInManager signInManager, UserManager<User> userManager)
+    public HomeViewModel(Window mainWindow, MainWindowViewModel mainWindowViewModel, CustomSignInManager signInManager,
+        UserManager<User> userManager)
     {
         _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
         _mainWindowViewModel = mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
@@ -99,10 +100,9 @@ public class HomeViewModel : ViewModelBase
             {
                 // 创建并显示新的登录窗口
                 var loginWindow = new LoginWindow(_signInManager, _userManager);
-                if (Application.Current is App app && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                {
+                if (Application.Current is App app &&
+                    app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     desktop.MainWindow = loginWindow;
-                }
                 loginWindow.Show();
 
                 // 关闭当前主窗口
