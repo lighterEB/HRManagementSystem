@@ -9,6 +9,6 @@ public class RoleMenu
 
     [Required] public string MenuId { get; set; } = string.Empty;
 
-    public ApplicationRole Role { get; set; } = null!;
-    public Menu Menu { get; set; } = null!;
+    public virtual ApplicationRole Role { get; set; } = null!;
+    public virtual Menu Menu { get; set; } = null!;
 }
