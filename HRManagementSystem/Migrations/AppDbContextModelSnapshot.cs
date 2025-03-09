@@ -15,7 +15,7 @@ namespace HRManagementSystem.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
             modelBuilder.Entity("HRManagementSystem.Models.Announcement", b =>
                 {
@@ -57,39 +57,6 @@ namespace HRManagementSystem.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("Announcements", (string)null);
-                });
-
-            modelBuilder.Entity("HRManagementSystem.Models.ApplicationRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsSystemRole")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("HRManagementSystem.Models.Attendance", b =>
@@ -319,6 +286,45 @@ namespace HRManagementSystem.Migrations
                     b.ToTable("Employees", (string)null);
                 });
 
+            modelBuilder.Entity("HRManagementSystem.Models.Identity.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSystemRole")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MenuId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("Roles", (string)null);
+                });
+
             modelBuilder.Entity("HRManagementSystem.Models.Identity.User", b =>
                 {
                     b.Property<string>("Id")
@@ -376,6 +382,7 @@ namespace HRManagementSystem.Migrations
 
                     b.Property<string>("RealName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SecurityStamp")
@@ -991,18 +998,20 @@ namespace HRManagementSystem.Migrations
             modelBuilder.Entity("HRManagementSystem.Models.RoleMenu", b =>
                 {
                     b.HasOne("HRManagementSystem.Models.Menu", "Menu")
-                        .WithMany()
+                        .WithMany("RoleMenus")
                         .HasForeignKey("MenuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HRManagementSystem.Models.ApplicationRole", null)
-                        .WithMany()
+                    b.HasOne("HRManagementSystem.Models.Identity.ApplicationRole", "Role")
+                        .WithMany("RoleMenus")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Menu");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("HRManagementSystem.Models.RolePermission", b =>
@@ -1013,7 +1022,7 @@ namespace HRManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HRManagementSystem.Models.ApplicationRole", null)
+                    b.HasOne("HRManagementSystem.Models.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1060,7 +1069,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.ApplicationRole", null)
+                    b.HasOne("HRManagementSystem.Models.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1087,7 +1096,7 @@ namespace HRManagementSystem.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("HRManagementSystem.Models.ApplicationRole", null)
+                    b.HasOne("HRManagementSystem.Models.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1114,9 +1123,16 @@ namespace HRManagementSystem.Migrations
                     b.Navigation("ChildDepartments");
                 });
 
+            modelBuilder.Entity("HRManagementSystem.Models.Identity.ApplicationRole", b =>
+                {
+                    b.Navigation("RoleMenus");
+                });
+
             modelBuilder.Entity("HRManagementSystem.Models.Menu", b =>
                 {
                     b.Navigation("ChildMenus");
+
+                    b.Navigation("RoleMenus");
                 });
 #pragma warning restore 612, 618
         }
