@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia;
@@ -24,7 +23,7 @@ namespace HRManagementSystem;
 public class App : Application
 {
     private ServiceProvider? _serviceProvider;
-
+    
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -87,20 +86,44 @@ public class App : Application
                 provider.GetRequiredService<IAuthenticationSchemeProvider>()
             ));
         // 后续其他服务在此添加...
-
+        
+        // 注册数据库初始化服务
+        services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
+        
         // 构建服务提供者
         _serviceProvider = services.BuildServiceProvider();
         if (_serviceProvider == null) throw new InvalidOperationException("服务提供者构建失败");
 
         Console.WriteLine("服务提供者已成功构建");
 
-        // 初始化数据库
-        InitializeDatabase();
-        Console.WriteLine("数据库已成功初始化");
-
         // 主窗口配置
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            // 使用数据库初始化服务
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger<App>();
+                var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+                
+                try
+                {
+                    // 确保数据库已创建并应用迁移
+                    logger.LogInformation("开始确保数据库已创建...");
+                    databaseInitializer.EnsureDatabaseCreatedAsync().Wait();
+                    logger.LogInformation("数据库创建和迁移完成");
+                    
+                    // 初始化系统数据
+                    logger.LogInformation("开始初始化系统数据...");
+                    databaseInitializer.InitializeSystemDataAsync().Wait();
+                    logger.LogInformation("系统数据初始化完成");
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "数据库初始化过程中发生错误");
+                }
+            }
+            
             // 检查服务是否正确注册
             Console.WriteLine("Checking service registration...");
             Console.WriteLine("IHttpContextAccessor registered: " +
@@ -126,75 +149,6 @@ public class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
-    }
-
-    private void InitializeDatabase()
-    {
-        if (_serviceProvider == null) throw new InvalidOperationException("Service provider not initialized.");
-        using var scope = _serviceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        // 自动迁移
-        if (dbContext.Database.GetPendingMigrations().Any()) dbContext.Database.Migrate();
-
-        // 初始化系统管理员
-        SeedAdminUser(scope.ServiceProvider).Wait();
-    }
-
-
-    private async Task SeedAdminUser(IServiceProvider serviceProvider)
-    {
-        var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger<App>();
-
-        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-        logger.LogInformation("开始初始化管理员用户...");
-
-        // 创建管理员角色
-        if (!await roleManager.RoleExistsAsync("Admin"))
-        {
-            logger.LogInformation("创建管理员角色...");
-            await roleManager.CreateAsync(new ApplicationRole
-            {
-                Name = "Admin",
-                Description = "系统管理员",
-                IsSystemRole = true
-            });
-            logger.LogInformation("管理员角色创建完成");
-        }
-
-        // 创建默认管理员用户
-        var adminUser = await userManager.FindByNameAsync("admin");
-        if (adminUser == null)
-        {
-            logger.LogInformation("创建默认管理员用户...");
-            adminUser = new User
-            {
-                UserName = "admin",
-                Email = "admin@example.com",
-                RealName = "系统管理员",
-                EmailConfirmed = true
-            };
-
-            var result = await userManager.CreateAsync(adminUser, "Admin@1234");
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
-                logger.LogInformation("默认管理员用户创建完成");
-            }
-            else
-            {
-                logger.LogError($"创建默认管理员用户失败: {string.Join(", ", result.Errors)}");
-            }
-        }
-        else
-        {
-            logger.LogInformation("默认管理员用户已存在");
-        }
-
-        logger.LogInformation("管理员用户初始化完成");
     }
 
     // 获取服务的辅助方法

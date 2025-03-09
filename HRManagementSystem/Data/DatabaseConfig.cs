@@ -17,7 +17,7 @@ public static class DatabaseConfig
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
 
-            return Path.Combine(folder, "hrms.db");
+            return Path.Combine(folder, "HRManagementSystem.db");
         }
     }
 }

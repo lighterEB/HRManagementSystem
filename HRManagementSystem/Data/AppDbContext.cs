@@ -3,6 +3,8 @@ using HRManagementSystem.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
 
 namespace HRManagementSystem.Data;
 
@@ -99,13 +101,15 @@ public class AppDbContext : IdentityDbContext<User, ApplicationRole, string>
         {
             b.HasKey(rm => new { rm.RoleId, rm.MenuId });
 
-            b.HasOne<ApplicationRole>()
-                .WithMany()
+            // 配置与Role的关系，使用RoleMenu.Role导航属性
+            b.HasOne(rm => rm.Role)  // 使用导航属性
+                .WithMany(r => r.RoleMenus)  // 需要在ApplicationRole中添加这个集合
                 .HasForeignKey(rm => rm.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            b.HasOne(rm => rm.Menu)
-                .WithMany()
+            // 配置与Menu的关系，使用RoleMenu.Menu导航属性和Menu.RoleMenus集合
+            b.HasOne(rm => rm.Menu)  // 使用导航属性
+                .WithMany(m => m.RoleMenus)  // 使用已有的Menu.RoleMenus集合
                 .HasForeignKey(rm => rm.MenuId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -302,8 +306,13 @@ public class AppDbContext : IdentityDbContext<User, ApplicationRole, string>
         });
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        options.UseSqlite("Data Source=HRManagement.db");
+        // 如果已经配置，不要再次配置
+        if (!optionsBuilder.IsConfigured)
+        {
+            // 确保这里使用与服务注册相同的连接字符串
+            optionsBuilder.UseSqlite($"Data Source={DatabaseConfig.DbPath}");
+        }
     }
 }
