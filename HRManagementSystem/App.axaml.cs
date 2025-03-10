@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using HRManagementSystem.Data;
 using HRManagementSystem.Models.Identity;
 using HRManagementSystem.Services.Implementations;
@@ -17,14 +18,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ReactiveUI;
-using Avalonia.Threading;
 
 namespace HRManagementSystem;
 
 public class App : Application
 {
     private ServiceProvider? _serviceProvider;
-    
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -87,10 +87,11 @@ public class App : Application
                 provider.GetRequiredService<IAuthenticationSchemeProvider>()
             ));
         // 后续其他服务在此添加...
-        
+        services.AddScoped<IPermissionManagementService, PermissionManagementService>();
+
         // 注册数据库初始化服务
         services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
-        
+
         // 构建服务提供者
         _serviceProvider = services.BuildServiceProvider();
         if (_serviceProvider == null) throw new InvalidOperationException("服务提供者构建失败");
@@ -100,7 +101,6 @@ public class App : Application
         // 主窗口配置
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            
             // 检查服务是否正确注册
             Console.WriteLine("Checking service registration...");
             Console.WriteLine("IHttpContextAccessor registered: " +
@@ -121,19 +121,19 @@ public class App : Application
                 throw new InvalidOperationException("SignInManager 或 UserManager 未正确初始化");
 
             Console.WriteLine("正在创建启动窗口...");
-            
+
             // 创建并显示启动窗口
             var splashWindow = new SplashWindow();
             desktop.MainWindow = splashWindow;
-            
+
             // 异步初始化应用程序
-            Task.Run(async () => 
+            Task.Run(async () =>
             {
-                try 
+                try
                 {
                     // 等待启动动画完成和数据库初始化
                     var animationTask = splashWindow.ShowSplashScreenAsync();
-                    
+
                     // 数据库初始化
                     var dbTask = Task.Run(async () =>
                     {
@@ -142,13 +142,13 @@ public class App : Application
                             var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
                             var logger = loggerFactory.CreateLogger<App>();
                             var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
-                            
+
                             try
                             {
                                 logger.LogInformation("开始确保数据库已创建...");
                                 await databaseInitializer.EnsureDatabaseCreatedAsync();
                                 logger.LogInformation("数据库创建和迁移完成");
-                                
+
                                 logger.LogInformation("开始初始化系统数据...");
                                 await databaseInitializer.InitializeSystemDataAsync();
                                 logger.LogInformation("系统数据初始化完成");
@@ -162,10 +162,10 @@ public class App : Application
 
                     // 等待所有任务完成
                     await Task.WhenAll(animationTask, dbTask);
-                    
+
                     // 执行淡出动画
                     await splashWindow.FadeOutAsync();
-                    
+
                     // 切换到登录窗口
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
@@ -175,10 +175,10 @@ public class App : Application
                         splashWindow.Close(); // 然后关闭启动窗口
                     });
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     Console.WriteLine($"启动过程中发生错误: {ex}");
-                    
+
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         var loginWindow = new LoginWindow(signInManager, userManager);
