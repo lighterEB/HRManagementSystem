@@ -14,14 +14,14 @@
     <Window.Styles>
         <!-- 添加窗口淡入动画 -->
         <Style Selector="Window">
-            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Opacity" Value="0" />
             <Style.Animations>
                 <Animation Duration="0:0:0.3" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="0.0"/>
+                        <Setter Property="Opacity" Value="0.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="Opacity" Value="1.0"/>
+                        <Setter Property="Opacity" Value="1.0" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>

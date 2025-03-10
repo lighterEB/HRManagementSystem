@@ -5,7 +5,7 @@ namespace HRManagementSystem.Models.Identity;
 
 public class ApplicationRole : IdentityRole
 {
-    public ApplicationRole() : base()
+    public ApplicationRole()
     {
         RoleMenus = new HashSet<RoleMenu>();
     }
@@ -26,7 +26,7 @@ public class ApplicationRole : IdentityRole
 
     // 确保RoleId不会造成冲突
     public string? RoleId { get; set; } = null;
-
+    
     // 导航属性
     public virtual ICollection<RoleMenu> RoleMenus { get; set; }
 }

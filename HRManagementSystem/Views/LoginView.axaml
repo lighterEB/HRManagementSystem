@@ -22,10 +22,10 @@
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="TextDecorations" Value="Underline" />
             <Style Selector="^:pointerover">
-                <Setter Property="Foreground" Value="#6A1B9A"></Setter>
+                <Setter Property="Foreground" Value="#6A1B9A" />
             </Style>
         </Style>
-        
+
     </UserControl.Styles>
 
     <Grid>
