@@ -68,5 +68,15 @@
             <Setter Property="Background" Value="LightGray" />
             <Setter Property="Foreground" Value="#616161" />
         </Style>
+
+        <!-- 添加动画相关样式 -->
+        <Style Selector="ProgressBar">
+            <Setter Property="Foreground" Value="#B39DDB"/>
+        </Style>
+        
+        <Style Selector="Window.splash">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="TransparencyLevelHint" Value="Transparent"/>
+        </Style>
     </Application.Styles>
 </Application>

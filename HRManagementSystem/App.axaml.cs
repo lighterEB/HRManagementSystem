@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ReactiveUI;
+using Avalonia.Threading;
 
 namespace HRManagementSystem;
 
@@ -99,30 +100,6 @@ public class App : Application
         // 主窗口配置
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // 使用数据库初始化服务
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
-                var logger = loggerFactory.CreateLogger<App>();
-                var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
-                
-                try
-                {
-                    // 确保数据库已创建并应用迁移
-                    logger.LogInformation("开始确保数据库已创建...");
-                    databaseInitializer.EnsureDatabaseCreatedAsync().Wait();
-                    logger.LogInformation("数据库创建和迁移完成");
-                    
-                    // 初始化系统数据
-                    logger.LogInformation("开始初始化系统数据...");
-                    databaseInitializer.InitializeSystemDataAsync().Wait();
-                    logger.LogInformation("系统数据初始化完成");
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "数据库初始化过程中发生错误");
-                }
-            }
             
             // 检查服务是否正确注册
             Console.WriteLine("Checking service registration...");
@@ -143,9 +120,74 @@ public class App : Application
             if (signInManager == null || userManager == null)
                 throw new InvalidOperationException("SignInManager 或 UserManager 未正确初始化");
 
-            Console.WriteLine("正在创建主窗口...");
-            desktop.MainWindow = new LoginWindow(signInManager, userManager);
-            Console.WriteLine("主窗口已创建");
+            Console.WriteLine("正在创建启动窗口...");
+            
+            // 创建并显示启动窗口
+            var splashWindow = new SplashWindow();
+            desktop.MainWindow = splashWindow;
+            
+            // 异步初始化应用程序
+            Task.Run(async () => 
+            {
+                try 
+                {
+                    // 等待启动动画完成和数据库初始化
+                    var animationTask = splashWindow.ShowSplashScreenAsync();
+                    
+                    // 数据库初始化
+                    var dbTask = Task.Run(async () =>
+                    {
+                        using (var scope = _serviceProvider.CreateScope())
+                        {
+                            var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
+                            var logger = loggerFactory.CreateLogger<App>();
+                            var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+                            
+                            try
+                            {
+                                logger.LogInformation("开始确保数据库已创建...");
+                                await databaseInitializer.EnsureDatabaseCreatedAsync();
+                                logger.LogInformation("数据库创建和迁移完成");
+                                
+                                logger.LogInformation("开始初始化系统数据...");
+                                await databaseInitializer.InitializeSystemDataAsync();
+                                logger.LogInformation("系统数据初始化完成");
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError(ex, "数据库初始化过程中发生错误");
+                            }
+                        }
+                    });
+
+                    // 等待所有任务完成
+                    await Task.WhenAll(animationTask, dbTask);
+                    
+                    // 执行淡出动画
+                    await splashWindow.FadeOutAsync();
+                    
+                    // 切换到登录窗口
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        var loginWindow = new LoginWindow(signInManager, userManager);
+                        loginWindow.Show(); // 先显示登录窗口
+                        desktop.MainWindow = loginWindow;
+                        splashWindow.Close(); // 然后关闭启动窗口
+                    });
+                }
+                catch (Exception ex) 
+                {
+                    Console.WriteLine($"启动过程中发生错误: {ex}");
+                    
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        var loginWindow = new LoginWindow(signInManager, userManager);
+                        loginWindow.Show();
+                        desktop.MainWindow = loginWindow;
+                        splashWindow.Close();
+                    });
+                }
+            });
         }
 
         base.OnFrameworkInitializationCompleted();
