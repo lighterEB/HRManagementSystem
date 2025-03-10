@@ -3,8 +3,6 @@ using HRManagementSystem.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
 
 namespace HRManagementSystem.Data;
 
@@ -63,6 +61,15 @@ public class AppDbContext : IdentityDbContext<User, ApplicationRole, string>
             b.HasIndex(p => p.Code).IsUnique();
             b.ToTable("Permissions");
         });
+        
+        // 配置角色表
+        builder.Entity<ApplicationRole>(b =>
+        {
+            b.ToTable("Roles");
+        
+            // 确保索引使用正确的列名
+            b.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
+        });
 
         // 配置角色-权限关系（多对多）
         builder.Entity<RolePermission>(b =>
@@ -102,14 +109,14 @@ public class AppDbContext : IdentityDbContext<User, ApplicationRole, string>
             b.HasKey(rm => new { rm.RoleId, rm.MenuId });
 
             // 配置与Role的关系，使用RoleMenu.Role导航属性
-            b.HasOne(rm => rm.Role)  // 使用导航属性
-                .WithMany(r => r.RoleMenus)  // 需要在ApplicationRole中添加这个集合
+            b.HasOne(rm => rm.Role) // 使用导航属性
+                .WithMany(r => r.RoleMenus) // 需要在ApplicationRole中添加这个集合
                 .HasForeignKey(rm => rm.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // 配置与Menu的关系，使用RoleMenu.Menu导航属性和Menu.RoleMenus集合
-            b.HasOne(rm => rm.Menu)  // 使用导航属性
-                .WithMany(m => m.RoleMenus)  // 使用已有的Menu.RoleMenus集合
+            b.HasOne(rm => rm.Menu) // 使用导航属性
+                .WithMany(m => m.RoleMenus) // 使用已有的Menu.RoleMenus集合
                 .HasForeignKey(rm => rm.MenuId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -310,9 +317,7 @@ public class AppDbContext : IdentityDbContext<User, ApplicationRole, string>
     {
         // 如果已经配置，不要再次配置
         if (!optionsBuilder.IsConfigured)
-        {
             // 确保这里使用与服务注册相同的连接字符串
             optionsBuilder.UseSqlite($"Data Source={DatabaseConfig.DbPath}");
-        }
     }
 }
